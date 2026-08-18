@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Kiếm Tiền</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
+<body>
+
+<div class="app">
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <span class="logo-icon">S</span>
+            <span>SMART<br><b>REWARD</b></span>
+        </div>
+
+        <div class="header-icons">
+            🔔
+            👤
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div>
+            <p class="small-title">NỀN TẢNG THƯỞNG TRỰC TUYẾN</p>
+            <h1>TRẢ LỜI CÂU HỎI<br>NHẬN THƯỞNG</h1>
+            <p>Hoàn thành nhiệm vụ mỗi ngày và tích điểm.</p>
+
+            <button>BẮT ĐẦU NGAY →</button>
+        </div>
+
+        <div class="banner-coins">
+            🪙<br>💰
+        </div>
+    </section>
+
+    <!-- Balance -->
+    <section class="balance">
+        <div>
+            <span>Số dư điểm</span>
+            <strong>12,580</strong>
+            <small>POINT</small>
+        </div>
+
+        <div class="balance-icon">💰</div>
+    </section>
+
+    <!-- Menu -->
+    <section class="menu">
+
+        <div class="menu-item">
+            <div class="menu-icon">❓</div>
+            <b>Câu hỏi</b>
+            <span>Trả lời nhận điểm</span>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-icon">🎁</div>
+            <b>Nhiệm vụ</b>
+            <span>Nhận thưởng</span>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-icon">💳</div>
+            <b>Ví của tôi</b>
+            <span>Quản lý điểm</span>
+        </div>
+
+        <div class="menu-item">
+            <div class="menu-icon">📖</div>
+            <b>Hướng dẫn</b>
+            <span>Cách sử dụng</span>
+        </div>
+
+    </section>
+
+    <!-- Question -->
+    <section class="question-card">
+
+        <div class="section-title">
+            <h2>❓ Câu hỏi hôm nay</h2>
+            <span>+100 điểm</span>
+        </div>
+
+        <p class="question">
+            Thủ đô của Việt Nam là thành phố nào?
+        </p>
+
+        <label class="answer">
+            <input type="radio" name="answer">
+            <span>TP. Hồ Chí Minh</span>
+        </label>
+
+        <label class="answer">
+            <input type="radio" name="answer">
+            <span>Hà Nội</span>
+        </label>
+
+        <label class="answer">
+            <input type="radio" name="answer">
+            <span>Đà Nẵng</span>
+        </label>
+
+        <label class="answer">
+            <input type="radio" name="answer">
+            <span>Hải Phòng</span>
+        </label>
+
+        <button class="submit-btn">XÁC NHẬN CÂU TRẢ LỜI</button>
+
+    </section>
+
+    <!-- VIP -->
+    <section class="vip-section">
+
+        <div class="section-title">
+            <h2>🎯 Cấp độ thành viên</h2>
+            <span>Xem tất cả →</span>
+        </div>
+
+        <div class="vip-list">
+            <div class="vip vip1">LEVEL 1</div>
+            <div class="vip vip2">LEVEL 2</div>
+            <div class="vip vip3">LEVEL 3</div>
+        </div>
+
+    </section>
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+        <div class="active">
+            🏠
+            <span>Trang chủ</span>
+        </div>
+
+        <div>
+            🎯
+            <span>Nhiệm vụ</span>
+        </div>
+
+        <div>
+            💰
+            <span>Ví</span>
+        </div>
+
+        <div>
+            👤
+            <span>Tài khoản</span>
+        </div>
+    </nav>
+
+</div>
+
+</body>
+</html>
