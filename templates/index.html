@@ -76,9 +76,9 @@
             </span>
 
             <div class="balance-number">
-    <span id="userScore">0</span>
-    <small>điểm</small>
-</div>
+                <span id="userScore">0</span>
+                <small>điểm</small>
+            </div>
 
             <span class="balance-note">
                 🎁 Tiếp tục trả lời để nhận thêm điểm
@@ -521,6 +521,10 @@
 
 <script>
 
+/* ==================================================
+   TICKER
+================================================== */
+
 const rewards = [
     "hoangnam_dz vừa nhận 100.000 VNĐ 🎉",
     "thihang209 vừa nhận thẻ cào 50K 🎁",
@@ -536,31 +540,52 @@ function updateTicker() {
     const ticker =
         document.getElementById("tickerText");
 
-    const random =
-        rewards[Math.floor(Math.random() * rewards.length)];
+    if (!ticker) return;
 
-    ticker.classList.remove("ticker-animation");
+    const random =
+        rewards[
+            Math.floor(
+                Math.random() * rewards.length
+            )
+        ];
+
+    ticker.classList.remove(
+        "ticker-animation"
+    );
 
     void ticker.offsetWidth;
 
     ticker.textContent =
         "🎉 " + random;
 
-    ticker.classList.add("ticker-animation");
+    ticker.classList.add(
+        "ticker-animation"
+    );
 }
 
 
 updateTicker();
 
-setInterval(updateTicker, 5000);
+setInterval(
+    updateTicker,
+    5000
+);
 
+
+/* ==================================================
+   NGÔN NGỮ
+================================================== */
 
 function changeLanguage() {
 
     const language =
         document.getElementById("language");
 
-    if (language.textContent === "VN") {
+    if (!language) return;
+
+    if (
+        language.textContent.trim() === "VN"
+    ) {
 
         language.textContent = "EN";
 
@@ -579,6 +604,10 @@ function changeLanguage() {
 }
 
 
+/* ==================================================
+   QUIZ TRÊN TRANG CHỦ
+================================================== */
+
 function checkAnswer() {
 
     const selected =
@@ -596,10 +625,12 @@ function checkAnswer() {
     }
 
 
-    if (selected.value === "b") {
+    if (
+        selected.value === "b"
+    ) {
 
         showMessage(
-            "🎉 Chính xác! +100 điểm demo"
+            "🎉 Chính xác! Hãy vào Quiz để nhận điểm"
         );
 
     } else {
@@ -611,11 +642,18 @@ function checkAnswer() {
 }
 
 
+/* ==================================================
+   NHẬN NHIỆM VỤ DEMO
+================================================== */
+
 function claimTask(button) {
+
+    if (!button) return;
 
     button.disabled = true;
 
-    button.textContent = "Đã nhận";
+    button.textContent =
+        "Đã nhận";
 
     showMessage(
         "🎉 Đã nhận +100 điểm demo"
@@ -623,42 +661,124 @@ function claimTask(button) {
 }
 
 
+/* ==================================================
+   MESSAGE
+================================================== */
+
 function showMessage(text) {
 
     const message =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
-    message.textContent = text;
+    if (!message) return;
 
-    message.classList.add("show");
+    message.textContent =
+        text;
+
+    message.classList.add(
+        "show"
+    );
 
     setTimeout(() => {
 
-        message.classList.remove("show");
+        message.classList.remove(
+            "show"
+        );
 
     }, 2500);
-}<script>
+}
+
+
+/* ==================================================
+   LẤY ĐIỂM TỪ FLASK SESSION
+================================================== */
+
 async function loadUserScore() {
+
+    const scoreElement =
+        document.getElementById(
+            "userScore"
+        );
+
+    if (!scoreElement) return;
+
     try {
-        const response = await fetch("/api/score");
-        const data = await response.json();
 
-        const score = document.getElementById("userScore");
+        const response =
+            await fetch(
+                "/api/score",
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    credentials: "same-origin"
+                }
+            );
 
-        if (score) {
-            score.textContent =
-                Number(data.score).toLocaleString("vi-VN");
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
         }
 
+
+        const data =
+            await response.json();
+
+
+        const score =
+            Number(
+                data.score || 0
+            );
+
+
+        scoreElement.textContent =
+            score.toLocaleString(
+                "vi-VN"
+            );
+
+
     } catch (error) {
-        console.log("Không lấy được điểm:", error);
+
+        console.error(
+            "Không lấy được điểm:",
+            error
+        );
+
+        scoreElement.textContent =
+            "0";
     }
 }
 
-loadUserScore();
-</script>
+
+/* ==================================================
+   CHẠY KHI TRANG ĐÃ LOAD
+================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadUserScore();
+
+    }
+);
+
+
+/* ==================================================
+   TỰ CẬP NHẬT ĐIỂM
+================================================== */
+
+setInterval(
+    loadUserScore,
+    3000
+);
 
 </script>
+
 
 </body>
 </html>
