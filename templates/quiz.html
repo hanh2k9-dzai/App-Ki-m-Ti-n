@@ -1,44 +1,133 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="quiz-card">
-    <h2 style="font-size: 18px; color: #0f172a; margin-bottom: 10px;">Trả Lời Câu Hỏi</h2>
+<style>
+    .quiz-card {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .ad-box {
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 10px;
+        text-align: center;
+        margin: 15px 0;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .timer-box {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1e40af;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        margin: 15px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .options-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    .opt-btn {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 14px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .opt-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .opt-btn.selected {
+        background: #0284c7;
+        color: #ffffff;
+        border-color: #0284c7;
+    }
+    .submit-btn {
+        width: 100%;
+        background: #cbd5e1;
+        color: #64748b;
+        border: none;
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 14px;
+        margin-top: 20px;
+        cursor: not-allowed;
+        transition: all 0.2s ease;
+    }
+    .submit-btn.active {
+        background: #0284c7;
+        color: #ffffff;
+        cursor: pointer;
+    }
+    .result-msg {
+        margin-top: 15px;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        display: none;
+    }
+</style>
 
-    <!-- Ô QUẢNG CÁO TOP (Dán code Monetag Banner/MultiTag vào đây) -->
-    <div class="ad-box">
-        <!-- 🔴 DÁN MÃ MONETAG VÀO ĐÂY 🔴 -->
-        <span>[Quảng Cáo Banner / MultiTag]</span>
+<div class="quiz-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 18px; color: #0f172a; font-weight: 800;">Trả Lời Câu Hỏi</h2>
+        <span style="font-size: 12px; font-weight: bold; color: #16a34a; background: #dcfce7; padding: 4px 10px; border-radius: 20px;">+{{ question.points }} POINT</span>
     </div>
 
-    <!-- Tên câu hỏi -->
-    <h3 style="font-size: 16px; color: #1e293b; margin: 15px 0 10px;">Thủ đô của Việt Nam là gì?</h3>
+    <!-- Ô QUẢNG CÁO MONETAG (ZONE 271292) -->
+    <div class="ad-box">
+        <script src="https://quge5.com/88/tag.min.js" data-zone="271292" async data-cfasync="false"></script>
+    </div>
 
-    <!-- Đồng hồ đếm ngược -->
+    <!-- Nội dung câu hỏi ngẫu nhiên từ Python -->
+    <h3 style="font-size: 16px; color: #1e293b; margin: 15px 0 10px; font-weight: 700;">{{ question.question }}</h3>
+
+    <!-- Khung đếm ngược 15s -->
     <div class="timer-box" id="timer-status">
         <i class="fa-regular fa-clock"></i>
-        <span>Vui lòng chờ <b id="countdown" style="color: #ef4444; font-size: 15px;">15</b>s để chọn đáp án...</span>
+        <span>Vui lòng chờ <b id="countdown" style="color: #ef4444; font-size: 16px;">15</b>s để chọn đáp án...</span>
     </div>
 
-    <!-- Các nút đáp án -->
+    <!-- Danh sách đáp án ngẫu nhiên -->
     <div class="options-grid">
-        <button class="opt-btn" disabled onclick="selectAnswer(this)">A. TP.HCM</button>
-        <button class="opt-btn" disabled onclick="selectAnswer(this)">B. Hà Nội</button>
-        <button class="opt-btn" disabled onclick="selectAnswer(this)">C. Đà Nẵng</button>
-        <button class="opt-btn" disabled onclick="selectAnswer(this)">D. Cần Thơ</button>
+        {% for opt in question.options %}
+        <button class="opt-btn" disabled onclick="selectAnswer(this, '{{ opt }}')">{{ opt }}</button>
+        {% endfor %}
     </div>
 
-    <!-- Ô QUẢNG CÁO BOTTOM -->
-    <div class="ad-box">
-        <span>[Quảng Cáo Native]</span>
-    </div>
+    <!-- Nút gửi kết quả -->
+    <button id="btn-submit" class="submit-btn" disabled onclick="submitQuiz()">GỬI CÂU TRẢ LỜI</button>
 
-    <!-- Nút Gửi -->
-    <button id="btn-submit" class="submit-btn" disabled>GỬI CÂU TRẢ LỜI</button>
+    <!-- Thẻ hiển thị thông báo đúng/sai -->
+    <div id="result-message" class="result-msg"></div>
 </div>
 
-<!-- SCRIPT ĐẾM NGƯỢC 15S VÀ MỞ KHÓA NÚT BẤM -->
 <script>
     let seconds = 15;
+    let selectedOption = "";
+    const questionId = {{ question.id }};
+
     const countdownEl = document.getElementById('countdown');
     const timerStatus = document.getElementById('timer-status');
     const optButtons = document.querySelectorAll('.opt-btn');
@@ -56,19 +145,51 @@
             timerStatus.style.color = '#166534';
             timerStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Đã hết 15s! Mời bạn chọn đáp án.';
             
-            // Mở khóa các nút chọn đáp án
+            // Mở khóa nút bấm chọn đáp án
             optButtons.forEach(btn => btn.removeAttribute('disabled'));
         }
     }, 1000);
 
-    // Chọn đáp án
-    function selectAnswer(element) {
+    function selectAnswer(element, val) {
+        selectedOption = val;
         optButtons.forEach(btn => btn.classList.remove('selected'));
         element.classList.add('selected');
         
-        // Mở khóa nút Gửi câu trả lời
         submitBtn.removeAttribute('disabled');
         submitBtn.classList.add('active');
+    }
+
+    function submitQuiz() {
+        if (!selectedOption) return;
+
+        fetch('/submit-answer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question_id: questionId,
+                answer: selectedOption
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const msgBox = document.getElementById('result-message');
+            msgBox.style.display = 'block';
+            
+            if (data.status === 'success') {
+                msgBox.style.background = '#dcfce7';
+                msgBox.style.color = '#15803d';
+                msgBox.innerText = data.message;
+            } else {
+                msgBox.style.background = '#fee2e2';
+                msgBox.style.color = '#b91c1c';
+                msgBox.innerText = data.message;
+            }
+
+            // Tự động load câu hỏi mới sau 2 giây
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        });
     }
 </script>
 {% endblock %}
