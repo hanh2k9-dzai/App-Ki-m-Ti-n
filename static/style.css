@@ -1,3 +1,31 @@
+/* Styling thêm cho hình ảnh trong Banner & Balance Card */
+.hero-img {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    width: 90px;
+    height: 90px;
+}
+
+.hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
+}
+
+.wallet-img {
+    width: 50px;
+    height: 50px;
+}
+
+.wallet-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
 body { background-color: #f4f6f9; display: flex; justify-content: center; }
 
