@@ -1,7 +1,117 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Banner Hero -->
+<style>
+    /* Styling Banner Hero */
+    .hero-card {
+        background: linear-gradient(135deg, #0284c7, #0d9488);
+        color: white;
+        padding: 20px;
+        border-radius: 16px;
+        margin-bottom: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-card .subtitle {
+        font-size: 10px;
+        opacity: 0.8;
+        letter-spacing: 1px;
+    }
+    .hero-card h2 {
+        font-size: 18px;
+        margin: 5px 0 10px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+    .hero-card .desc {
+        font-size: 11px;
+        opacity: 0.9;
+        margin-bottom: 15px;
+    }
+    .btn-primary {
+        display: inline-block;
+        background: #facc15;
+        color: #1e293b;
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    .hero-img {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        width: 75px;
+        height: 75px;
+    }
+
+    /* Styling Thẻ Số Dư Điểm */
+    .balance-card {
+        background: #0ea5e9;
+        color: white;
+        padding: 18px 20px;
+        border-radius: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
+    }
+    .balance-card p {
+        font-size: 12px;
+        opacity: 0.9;
+    }
+    .balance-card .points {
+        font-size: 24px;
+        font-weight: 800;
+    }
+    .balance-card .points span {
+        font-size: 12px;
+        font-weight: normal;
+    }
+    .wallet-img {
+        width: 48px;
+        height: 48px;
+    }
+
+    /* Grid Menu 4 ô */
+    .menu-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .grid-card {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #1e293b;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .card-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .question-bg { background: #e0f2fe; color: #0284c7; }
+    .task-bg { background: #fef3c7; color: #d97706; }
+    .wallet-bg { background: #fef08a; color: #ca8a04; }
+    .guide-bg { background: #e0e7ff; color: #4f46e5; }
+
+    .grid-card h3 { font-size: 14px; }
+    .grid-card p { font-size: 11px; color: #94a3b8; }
+</style>
+
+<!-- Banner Hero (Vector Đồng Xu Vàng SVG) -->
 <div class="hero-card">
     <div class="hero-text">
         <p class="subtitle">NỀN TẢNG THƯỞNG TRỰC TUYẾN</p>
@@ -10,40 +120,60 @@
         <a href="/quiz" class="btn-primary">BẮT ĐẦU NGAY <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     <div class="hero-img">
-        <img src="https://cdn-icons-png.flaticon.com/512/2856/2856711.png" alt="Gold Coin">
+        <!-- SVG Đồng coin vàng siêu nét không bao giờ lỗi -->
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="30" fill="#FAC213"/>
+            <circle cx="32" cy="32" r="24" fill="#F8A414"/>
+            <circle cx="32" cy="32" r="20" fill="#F39C12"/>
+            <path d="M32 18V46M25 24H36C38 24 39 25.5 39 27.5C39 29.5 38 31 35 31H29C26 31 25 32.5 25 34.5C25 36.5 26 38 29 38H40" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
     </div>
 </div>
 
-<!-- Balance Card -->
+<!-- Balance Card (Vector Túi Tiền SVG) -->
 <div class="balance-card">
     <div class="balance-info">
         <p>Số dư điểm</p>
         <div class="points">{{ "{:,}".format(user.points) }} <span>POINT</span></div>
     </div>
     <div class="wallet-img">
-        <img src="https://cdn-icons-png.flaticon.com/512/2543/2543360.png" alt="Money Bag">
+        <!-- SVG Túi tiền vàng -->
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 18C20 12 25 8 32 8C39 8 44 12 44 18L48 24H16L20 18Z" fill="#F1C40F"/>
+            <path d="M12 24H52L56 54C56 57 53 60 50 60H14C11 60 8 57 8 54L12 24Z" fill="#F39C12"/>
+            <circle cx="32" cy="42" r="8" fill="#F1C40F"/>
+            <path d="M32 37V47M29 39H34C35 39 36 39.5 36 40.5C36 41.5 35 42 33 42H31C29 42 28 42.5 28 43.5C28 44.5 29 45 31 45H35" stroke="#B7950B" stroke-width="2" stroke-linecap="round"/>
+        </svg>
     </div>
 </div>
 
-<!-- Grid Menu -->
+<!-- Grid Menu 4 Nút -->
 <div class="menu-grid">
     <a href="/quiz" class="grid-card">
-        <div class="card-icon question-bg">❓</div>
+        <div class="card-icon question-bg">
+            <i class="fa-solid fa-circle-question"></i>
+        </div>
         <h3>Câu hỏi</h3>
         <p>Trả lời nhận điểm</p>
     </a>
     <a href="/tasks" class="grid-card">
-        <div class="card-icon task-bg">🎁</div>
+        <div class="card-icon task-bg">
+            <i class="fa-solid fa-gift"></i>
+        </div>
         <h3>Nhiệm vụ</h3>
         <p>Nhận thưởng vượt link</p>
     </a>
     <a href="/wallet" class="grid-card">
-        <div class="card-icon wallet-bg">💳</div>
+        <div class="card-icon wallet-bg">
+            <i class="fa-solid fa-wallet"></i>
+        </div>
         <h3>Ví của tôi</h3>
         <p>Quản lý điểm & Rút</p>
     </a>
     <a href="#" class="grid-card">
-        <div class="card-icon guide-bg">📖</div>
+        <div class="card-icon guide-bg">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
         <h3>Hướng dẫn</h3>
         <p>Cách sử dụng</p>
     </a>
