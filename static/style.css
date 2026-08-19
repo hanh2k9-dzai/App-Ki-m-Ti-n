@@ -122,3 +122,89 @@ body {
 .nav-item.active {
     color: #0284c7;
 }
+
+/* --- STYLING CHO TRANG QUIZ --- */
+.quiz-card {
+    background: white;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.ad-box {
+    background: #f1f5f9;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    font-size: 12px;
+    color: #64748b;
+    margin: 12px 0;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.opt-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    text-align: left;
+    cursor: pointer;
+}
+
+.opt-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.opt-btn.selected {
+    background: #0284c7;
+    color: white;
+    border-color: #0284c7;
+}
+
+.submit-btn {
+    width: 100%;
+    background: #e2e8f0;
+    color: #94a3b8;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 15px;
+    cursor: not-allowed;
+}
+
+.submit-btn.active {
+    background: #0284c7;
+    color: white;
+    cursor: pointer;
+}
