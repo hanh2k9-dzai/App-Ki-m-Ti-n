@@ -1,54 +1,51 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART REWARD</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="user-info">
-                <div class="avatar">S</div>
-                <div class="user-text">
-                    <span class="name">SMART</span>
-                    <span class="badge">REWARD</span>
-                </div>
-            </div>
-            <div class="header-icons">
-                <i class="fa-regular fa-bell"></i>
-                <i class="fa-regular fa-user"></i>
-            </div>
-        </header>
+{% extends 'base.html' %}
 
-        <!-- Main Content -->
-        <main class="content">
-            {% block content %}{% endblock %}
-        </main>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
-                <i class="fa-solid fa-house"></i>
-                <span>Trang chủ</span>
-            </a>
-            <a href="/tasks" class="nav-item {% if request.path == '/tasks' %}active{% endif %}">
-                <i class="fa-solid fa-bullseye"></i>
-                <span>Nhiệm vụ</span>
-            </a>
-            <a href="/wallet" class="nav-item {% if request.path == '/wallet' %}active{% endif %}">
-                <i class="fa-solid fa-sack-dollar"></i>
-                <span>Ví</span>
-            </a>
-            <a href="/quiz" class="nav-item {% if request.path == '/quiz' %}active{% endif %}">
-                <i class="fa-solid fa-circle-question"></i>
-                <span>Câu hỏi</span>
-            </a>
-        </nav>
+{% block content %}
+<!-- Banner Hero -->
+<div class="hero-card">
+    <div class="hero-text">
+        <p class="subtitle">NỀN TẢNG THƯỞNG TRỰC TUYẾN</p>
+        <h2>TRẢ LỜI CÂU HỎI<br>NHẬN THƯỞNG</h2>
+        <p class="desc">Hoàn thành nhiệm vụ mỗi ngày và tích điểm.</p>
+        <a href="/quiz" class="btn-primary">BẮT ĐẦU NGAY <i class="fa-solid fa-arrow-right"></i></a>
     </div>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-</body>
-</html>
+    <div class="hero-img">
+        <img src="https://cdn-icons-png.flaticon.com/512/2856/2856711.png" alt="Gold Coin">
+    </div>
+</div>
+
+<!-- Balance Card -->
+<div class="balance-card">
+    <div class="balance-info">
+        <p>Số dư điểm</p>
+        <div class="points">{{ "{:,}".format(user.points) }} <span>POINT</span></div>
+    </div>
+    <div class="wallet-img">
+        <img src="https://cdn-icons-png.flaticon.com/512/2543/2543360.png" alt="Money Bag">
+    </div>
+</div>
+
+<!-- Grid Menu -->
+<div class="menu-grid">
+    <a href="/quiz" class="grid-card">
+        <div class="card-icon question-bg">❓</div>
+        <h3>Câu hỏi</h3>
+        <p>Trả lời nhận điểm</p>
+    </a>
+    <a href="/tasks" class="grid-card">
+        <div class="card-icon task-bg">🎁</div>
+        <h3>Nhiệm vụ</h3>
+        <p>Nhận thưởng vượt link</p>
+    </a>
+    <a href="/wallet" class="grid-card">
+        <div class="card-icon wallet-bg">💳</div>
+        <h3>Ví của tôi</h3>
+        <p>Quản lý điểm & Rút</p>
+    </a>
+    <a href="#" class="grid-card">
+        <div class="card-icon guide-bg">📖</div>
+        <h3>Hướng dẫn</h3>
+        <p>Cách sử dụng</p>
+    </a>
+</div>
+{% endblock %}
