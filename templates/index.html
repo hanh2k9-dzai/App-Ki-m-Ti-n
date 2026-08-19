@@ -9,34 +9,24 @@
 
     /* Thanh thông báo chạy ngang */
     .ticker-wrap { background: #fff8e1; border-bottom: 1px solid #ffe082; padding: 8px 0; overflow: hidden; white-space: nowrap; box-shadow: inset 0 0 5px rgba(0,0,0,0.05); }
-    .ticker-text { display: inline-block; animation: ticker 15s linear infinite; font-size: 13px; color: #d97706; font-weight: 500; }
+    .ticker-text { display: inline-block; animation: ticker 20s linear infinite; font-size: 13px; color: #d97706; font-weight: 500; }
     @keyframes ticker {
         0% { transform: translateX(100vw); }
         100% { transform: translateX(-100%); }
     }
 
-    /* Lưới tính năng (Grid Menu) */
-    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-    .grid-item { background: #fff; border-radius: 12px; padding: 15px 5px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-decoration: none; color: #333; }
-    .grid-icon { font-size: 28px; margin-bottom: 8px; display: block; }
-    .grid-text { font-size: 12px; font-weight: 600; }
-
-    /* Khu vực VIP */
-    .vip-container { padding: 0 15px; margin-top: 10px; }
-    .vip-title { font-size: 14px; font-weight: bold; margin-bottom: 10px; color: #333; }
-    .vip-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .vip-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-radius: 8px; color: white; font-weight: bold; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .vip-btn i { font-size: 12px; }
+    /* Lưới tính năng (Grid Menu - Chỉnh thành 4 cột cho giống app chuyên nghiệp) */
+    .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
+    .grid-item { background: #fff; border-radius: 12px; padding: 12px 2px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .grid-icon { font-size: 26px; margin-bottom: 5px; }
+    .grid-text { font-size: 11px; font-weight: 600; }
     
-    /* Màu sắc các cấp VIP */
-    .vip1 { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-    .vip2 { background: linear-gradient(90deg, #8b5cf6, #6d28d9); }
-    .vip3 { background: linear-gradient(90deg, #ec4899, #db2777); }
-    .vip4 { background: linear-gradient(90deg, #10b981, #059669); }
-    .vip5 { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    /* Highlight riêng cho mục VIP và AI */
+    .item-vip .grid-icon { background: linear-gradient(135deg, #fbbf24, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .item-ai .grid-icon { background: linear-gradient(135deg, #a855f7, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     /* Nút CSKH nổi */
-    .cskh-btn { position: fixed; bottom: 80px; right: 20px; background: #6366f1; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.5); z-index: 1000; cursor: pointer; }
+    .cskh-btn { position: fixed; bottom: 80px; right: 20px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.5); z-index: 1000; cursor: pointer; }
 </style>
 
 <!-- Header -->
@@ -45,19 +35,25 @@
     <div class="lang-toggle">🌐 VN / EN</div>
 </div>
 
-<!-- Thanh thông báo trúng thưởng -->
+<!-- Thanh thông báo trúng thưởng (Tự động sinh bằng JavaScript) -->
 <div class="ticker-wrap">
-    <div class="ticker-text">
-        🎉 Chúc mừng <b>David202</b> vừa rút thành công 50 USDT! &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; 
-        🔥 <b>thihang209</b> vừa mở Túi Mù trúng 100.000 VNĐ! &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; 
-        💸 <b>HoangNam99</b> vừa đổi thưởng thành công thẻ cào 50k!
+    <div class="ticker-text" id="dynamic-ticker">
+        <!-- Chữ sẽ được điền tự động vào đây -->
     </div>
 </div>
 
-<!-- Ở giữa đây bạn có thể chèn cái Thẻ Số dư điểm và Ảnh Banner nha -->
+<!-- Ở giữa đây là Thẻ Số dư điểm và Ảnh Banner lớn -->
 
-<!-- Lưới Tính Năng -->
+<!-- Lưới Tính Năng Gộp Chung (8 mục - Vừa vặn 2 hàng 4 cột) -->
 <div class="feature-grid">
+    <a href="/vip" class="grid-item item-vip">
+        <span class="grid-icon">👑</span>
+        <span class="grid-text">Đặc quyền VIP</span>
+    </a>
+    <a href="/ai-quiz" class="grid-item item-ai">
+        <span class="grid-icon">🤖</span>
+        <span class="grid-text">Hỏi AI</span>
+    </a>
     <a href="/rut-tien" class="grid-item">
         <span class="grid-icon">💳</span>
         <span class="grid-text">Rút tiền</span>
@@ -66,13 +62,13 @@
         <span class="grid-icon">🤝</span>
         <span class="grid-text">Mời bạn bè</span>
     </a>
-    <a href="/huong-dan" class="grid-item">
-        <span class="grid-icon">📖</span>
-        <span class="grid-text">Hướng dẫn</span>
-    </a>
     <a href="/tui-mu" class="grid-item">
         <span class="grid-icon">🛍️</span>
         <span class="grid-text">Túi mù</span>
+    </a>
+    <a href="/huong-dan" class="grid-item">
+        <span class="grid-icon">📖</span>
+        <span class="grid-text">Hướng dẫn</span>
     </a>
     <a href="/thong-tin" class="grid-item">
         <span class="grid-icon">ℹ️</span>
@@ -84,19 +80,38 @@
     </a>
 </div>
 
-<!-- Khu vực VIP -->
-<div class="vip-container">
-    <div class="vip-title">ĐẶC QUYỀN VIP</div>
-    <div class="vip-grid">
-        <a href="/vip/1" class="vip-btn vip1">VIP 1 <span>></span></a>
-        <a href="/vip/2" class="vip-btn vip2">VIP 2 <span>></span></a>
-        <a href="/vip/3" class="vip-btn vip3">VIP 3 <span>></span></a>
-        <a href="/vip/4" class="vip-btn vip4">VIP 4 <span>></span></a>
-        <a href="/vip/5" class="vip-btn vip5">VIP 5 <span>></span></a>
-    </div>
-</div>
-
 <!-- Nút CSKH Nổi -->
 <a href="/cskh" class="cskh-btn">
     🎧
 </a>
+
+<!-- MÃ JAVASCRIPT ĐỂ TỰ ĐỘNG TẠO THÔNG BÁO NGƯỜI TRÚNG THƯỞNG -->
+<script>
+    // Danh sách tên giả (Trộn lẫn Tây & Ta)
+    const usernames = ["David202", "thihang209", "Alex99", "minhtuan_88", "JohnDoe_US", "lanhuong.vo", "Ken_Crypto", "ngocanh2k", "Tony_stark", "hoangnam_dz", "Sarah_lin", "phuongthao_9x", "Michael_bee"];
+    
+    // Danh sách phần thưởng
+    const rewards = ["50 USDT", "100.000 VNĐ", "thẻ cào 50k", "10 USDT", "500.000 VNĐ", "Túi mù siêu cấp", "20 USDT", "Mã giảm giá 100k"];
+    
+    // Hành động
+    const actions = ["vừa rút thành công", "vừa đổi thưởng", "vừa mở trúng", "vừa hoàn thành nhiệm vụ nhận"];
+
+    function generateTickerContent() {
+        let content = "";
+        // Tạo 6 tin nhắn ngẫu nhiên nối vào nhau
+        for(let i = 0; i < 6; i++) {
+            let randomName = usernames[Math.floor(Math.random() * usernames.length)];
+            let randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+            let randomAction = actions[Math.floor(Math.random() * actions.length)];
+            
+            // Xử lý icon ngẫu nhiên cho thêm sinh động
+            let icon = (randomReward.includes("USDT") || randomReward.includes("VNĐ")) ? "💸" : (randomReward.includes("Túi mù") ? "🎁" : "🎉");
+            
+            content += `${icon} Chúc mừng <b>${randomName}</b> ${randomAction} ${randomReward}! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `;
+        }
+        return content;
+    }
+
+    // Đẩy dữ liệu vào thanh thông báo khi load web
+    document.getElementById("dynamic-ticker").innerHTML = generateTickerContent();
+</script>
