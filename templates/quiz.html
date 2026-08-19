@@ -1,38 +1,74 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="quiz-container">
-    <h2 class="page-title" style="margin-bottom: 15px; font-size: 18px; color: #1e293b;">Trả Lời Câu Hỏi</h2>
+<div class="quiz-card">
+    <h2 style="font-size: 18px; color: #0f172a; margin-bottom: 10px;">Trả Lời Câu Hỏi</h2>
 
-    <!-- Ad Unit Place 1 -->
+    <!-- Ô QUẢNG CÁO TOP (Dán code Monetag Banner/MultiTag vào đây) -->
     <div class="ad-box">
-        <p>[Quảng Cáo Banner 320x50]</p>
+        <!-- 🔴 DÁN MÃ MONETAG VÀO ĐÂY 🔴 -->
+        <span>[Quảng Cáo Banner / MultiTag]</span>
     </div>
 
-    {% if question %}
-    <div class="quiz-card" id="quiz-box" data-id="{{ question.id }}">
-        <h3 class="question-text">{{ question.title }}</h3>
-        
-        <div class="timer-box" id="timer-box">
-            <i class="fa-solid fa-clock"></i> Vui lòng chờ <span id="timer">15</span>s để chọn đáp án...
-        </div>
+    <!-- Tên câu hỏi -->
+    <h3 style="font-size: 16px; color: #1e293b; margin: 15px 0 10px;">Thủ đô của Việt Nam là gì?</h3>
 
-        <div class="options-list">
-            <button class="opt-btn" onclick="selectOption('A')" disabled>A. {{ question.option_a }}</button>
-            <button class="opt-btn" onclick="selectOption('B')" disabled>B. {{ question.option_b }}</button>
-            <button class="opt-btn" onclick="selectOption('C')" disabled>C. {{ question.option_c }}</button>
-            <button class="opt-btn" onclick="selectOption('D')" disabled>D. {{ question.option_d }}</button>
-        </div>
-
-        <!-- Ad Unit Place 2 -->
-        <div class="ad-box style-small">
-            <p>[Quảng Cáo Native]</p>
-        </div>
-
-        <button id="submit-btn" class="btn-submit" onclick="submitAnswer()" disabled>GỬI CÂU TRẢ LỜI</button>
+    <!-- Đồng hồ đếm ngược -->
+    <div class="timer-box" id="timer-status">
+        <i class="fa-regular fa-clock"></i>
+        <span>Vui lòng chờ <b id="countdown" style="color: #ef4444; font-size: 15px;">15</b>s để chọn đáp án...</span>
     </div>
-    {% else %}
-    <p>Hiện tại đã hết câu hỏi, vui lòng quay lại sau!</p>
-    {% endif %}
+
+    <!-- Các nút đáp án -->
+    <div class="options-grid">
+        <button class="opt-btn" disabled onclick="selectAnswer(this)">A. TP.HCM</button>
+        <button class="opt-btn" disabled onclick="selectAnswer(this)">B. Hà Nội</button>
+        <button class="opt-btn" disabled onclick="selectAnswer(this)">C. Đà Nẵng</button>
+        <button class="opt-btn" disabled onclick="selectAnswer(this)">D. Cần Thơ</button>
+    </div>
+
+    <!-- Ô QUẢNG CÁO BOTTOM -->
+    <div class="ad-box">
+        <span>[Quảng Cáo Native]</span>
+    </div>
+
+    <!-- Nút Gửi -->
+    <button id="btn-submit" class="submit-btn" disabled>GỬI CÂU TRẢ LỜI</button>
 </div>
+
+<!-- SCRIPT ĐẾM NGƯỢC 15S VÀ MỞ KHÓA NÚT BẤM -->
+<script>
+    let seconds = 15;
+    const countdownEl = document.getElementById('countdown');
+    const timerStatus = document.getElementById('timer-status');
+    const optButtons = document.querySelectorAll('.opt-btn');
+    const submitBtn = document.getElementById('btn-submit');
+
+    // Chạy đếm ngược 15s
+    const timer = setInterval(() => {
+        seconds--;
+        if (countdownEl) countdownEl.innerText = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            timerStatus.style.background = '#f0fdf4';
+            timerStatus.style.borderColor = '#bbf7d0';
+            timerStatus.style.color = '#166534';
+            timerStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Đã hết 15s! Mời bạn chọn đáp án.';
+            
+            // Mở khóa các nút chọn đáp án
+            optButtons.forEach(btn => btn.removeAttribute('disabled'));
+        }
+    }, 1000);
+
+    // Chọn đáp án
+    function selectAnswer(element) {
+        optButtons.forEach(btn => btn.classList.remove('selected'));
+        element.classList.add('selected');
+        
+        // Mở khóa nút Gửi câu trả lời
+        submitBtn.removeAttribute('disabled');
+        submitBtn.classList.add('active');
+    }
+</script>
 {% endblock %}
