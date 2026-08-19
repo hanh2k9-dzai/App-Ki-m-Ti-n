@@ -637,7 +637,26 @@ function showMessage(text) {
         message.classList.remove("show");
 
     }, 2500);
+}<script>
+async function loadUserScore() {
+    try {
+        const response = await fetch("/api/score");
+        const data = await response.json();
+
+        const score = document.getElementById("userScore");
+
+        if (score) {
+            score.textContent =
+                Number(data.score).toLocaleString("vi-VN");
+        }
+
+    } catch (error) {
+        console.log("Không lấy được điểm:", error);
+    }
 }
+
+loadUserScore();
+</script>
 
 </script>
 
