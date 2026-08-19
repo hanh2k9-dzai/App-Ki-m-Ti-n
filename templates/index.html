@@ -1,209 +1,645 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-{% block content %}
-<style>
-    /* Tổng quan */
-    body { 
-        background-color: #f1f5f9; 
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-        margin: 0; 
-        padding-bottom: 90px; /* Chừa khoảng trống cho menu dưới */
-    }
-    
-    /* Header */
-    .app-header { 
-        display: flex; justify-content: space-between; align-items: center; 
-        padding: 16px 20px; background: #ffffff; 
-    }
-    .app-name { font-size: 20px; font-weight: 800; color: #0f172a; }
-    .lang-toggle { font-size: 14px; font-weight: 700; color: #334155; background: #f1f5f9; padding: 6px 14px; border-radius: 20px; cursor: pointer; }
+    <title>🎁 Đố Vui Đổi Quà</title>
 
-    /* Khu vực Banner */
-    .banner-container {
-        padding: 12px 16px;
-        background: #ffffff;
-    }
-    .banner-container img {
-        width: 100%;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        display: block;
-        object-fit: cover;
-    }
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
 
-    /* Thanh thông báo chạy ngang */
-    .ticker-wrap { 
-        background: #fffbeb; border-bottom: 1px solid #fde68a; border-top: 1px solid #fde68a;
-        padding: 10px 0; overflow: hidden; white-space: nowrap; 
-    }
-    .ticker-text { 
-        display: inline-block; animation: ticker 25s linear infinite; 
-        font-size: 14px; color: #b45309; font-weight: 600; 
-    }
-    @keyframes ticker {
-        0% { transform: translateX(100vw); }
-        100% { transform: translateX(-100%); }
-    }
+<body>
 
-    /* Lưới tính năng (Grid Menu) */
-    .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 16px; }
-    .grid-item { 
-        background: #ffffff; border-radius: 16px; padding: 16px 4px; text-align: center; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.04); text-decoration: none; color: #1e293b; 
-        display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    }
-    .grid-icon { font-size: 32px; margin-bottom: 8px; }
-    .grid-text { font-size: 13px; font-weight: 700; line-height: 1.2; }
+<div class="app">
 
-    /* TIÊU ĐỀ CÁC MỤC KÉO DÀI TRANG */
-    .section-title {
-        font-size: 18px; font-weight: 800; color: #0f172a;
-        margin: 10px 16px 12px; display: flex; align-items: center; justify-content: space-between;
-    }
-    .section-title a { font-size: 13px; color: #0284c7; text-decoration: none; font-weight: 600; }
+    <!-- HEADER -->
+    <header class="header">
 
-    /* Card Nhiệm vụ & Xếp hạng */
-    .list-card {
-        background: #ffffff; border-radius: 16px; margin: 0 16px 12px; padding: 16px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: space-between;
-    }
-    .list-card-left { display: flex; align-items: center; gap: 12px; }
-    .list-card-icon { font-size: 28px; background: #f1f5f9; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
-    .list-card-info h4 { margin: 0 0 4px 0; font-size: 15px; color: #0f172a; }
-    .list-card-info p { margin: 0; font-size: 13px; color: #64748b; }
-    .btn-action { background: #0284c7; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
+        <div class="brand">
+            <div class="brand-icon">🎁</div>
 
-    /* Nút CSKH nổi */
-    .cskh-btn { 
-        position: fixed; bottom: 85px; right: 20px; background: linear-gradient(135deg, #0284c7, #0369a1); 
-        color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-        font-size: 28px; box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); z-index: 1000; text-decoration: none;
-    }
-</style>
-
-<!-- Header -->
-<div class="app-header">
-    <div class="app-name">🎁 Đố Vui Đổi Quà</div>
-    <div class="lang-toggle">🌐 VN / EN</div>
-</div>
-
-<!-- 1. ẢNH BANNER Ở TRÊN CÙNG -->
-<div class="banner-container">
-    <a href="/quiz">
-        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Đố Vui Đổi Thưởng">
-    </a>
-</div>
-
-<!-- 2. THANH THÔNG BÁO NGAY DƯỚI ẢNH -->
-<div class="ticker-wrap">
-    <div class="ticker-text" id="dynamic-ticker"></div>
-</div>
-
-<!-- 3. LƯỚI TÍNH NĂNG CHÍNH -->
-<div class="feature-grid">
-    <a href="/vip" class="grid-item">
-        <span class="grid-icon">👑</span>
-        <span class="grid-text">Đặc quyền VIP</span>
-    </a>
-    <a href="/ai-quiz" class="grid-item">
-        <span class="grid-icon">🤖</span>
-        <span class="grid-text">Hỏi AI</span>
-    </a>
-    <a href="/rut-tien" class="grid-item">
-        <span class="grid-icon">💳</span>
-        <span class="grid-text">Rút tiền</span>
-    </a>
-    <a href="/moi-ban" class="grid-item">
-        <span class="grid-icon">🤝</span>
-        <span class="grid-text">Mời bạn bè</span>
-    </a>
-    <a href="/tui-mu" class="grid-item">
-        <span class="grid-icon">🛍️</span>
-        <span class="grid-text">Túi mù</span>
-    </a>
-    <a href="/huong-dan" class="grid-item">
-        <span class="grid-icon">📖</span>
-        <span class="grid-text">Hướng dẫn</span>
-    </a>
-    <a href="/thong-tin" class="grid-item">
-        <span class="grid-icon">ℹ️</span>
-        <span class="grid-text">Thông tin web</span>
-    </a>
-    <a href="/nhiem-vu" class="grid-item">
-        <span class="grid-icon">🎯</span>
-        <span class="grid-text">Nhiệm vụ</span>
-    </a>
-</div>
-
-<!-- 4. KHU VỰC NHIỆM VỤ ĐỂ TRANG DÀI RA -->
-<div class="section-title">
-    Nhiệm vụ hàng ngày <a href="#">Xem tất cả ></a>
-</div>
-<div class="list-card">
-    <div class="list-card-left">
-        <div class="list-card-icon">✅</div>
-        <div class="list-card-info">
-            <h4>Điểm danh hàng ngày</h4>
-            <p>+50 POINT</p>
+            <div>
+                <strong>Đố Vui Đổi Quà</strong>
+                <small>Quiz • Reward • Fun</small>
+            </div>
         </div>
-    </div>
-    <button class="btn-action">Nhận</button>
-</div>
-<div class="list-card">
-    <div class="list-card-left">
-        <div class="list-card-icon">🧠</div>
-        <div class="list-card-info">
-            <h4>Trả lời 10 câu hỏi</h4>
-            <p>+200 POINT (3/10)</p>
+
+        <button class="language" onclick="changeLanguage()">
+            🌐 <span id="language">VN</span>
+        </button>
+
+    </header>
+
+
+    <!-- BANNER -->
+    <a href="/quiz" class="banner-link">
+
+        <div class="banner">
+
+            <img
+                src="{{ url_for('static', filename='banner.png') }}"
+                alt="Đố Vui Đổi Thưởng">
+
         </div>
+
+    </a>
+
+
+    <!-- TICKER -->
+    <div class="ticker">
+
+        <div class="ticker-icon">
+            🔊
+        </div>
+
+        <div class="ticker-window">
+
+            <div id="tickerText" class="ticker-text">
+                🎉 Chúc mừng người chơi vừa nhận thưởng!
+            </div>
+
+        </div>
+
     </div>
-    <button class="btn-action" style="background: #e2e8f0; color: #64748b;">Chưa đạt</button>
+
+
+    <!-- BALANCE -->
+    <section class="balance-card">
+
+        <div>
+
+            <span class="balance-title">
+                Điểm thưởng của bạn
+            </span>
+
+            <div class="balance-number">
+                12,580
+                <small>điểm</small>
+            </div>
+
+            <span class="balance-note">
+                🎁 Tiếp tục trả lời để nhận thêm điểm
+            </span>
+
+        </div>
+
+        <div class="balance-icon">
+            🪙
+        </div>
+
+    </section>
+
+
+    <!-- FEATURE GRID -->
+    <section class="features">
+
+        <a href="/vip" class="feature vip">
+            <div class="feature-icon">👑</div>
+            <strong>Đặc quyền VIP</strong>
+            <small>Ưu đãi thành viên</small>
+        </a>
+
+        <a href="/ai-quiz" class="feature ai">
+            <div class="feature-icon">🤖</div>
+            <strong>Hỏi AI</strong>
+            <small>Tạo câu hỏi</small>
+        </a>
+
+        <a href="/rut-tien" class="feature withdraw">
+            <div class="feature-icon">💳</div>
+            <strong>Rút điểm</strong>
+            <small>Đổi phần thưởng</small>
+        </a>
+
+        <a href="/moi-ban" class="feature invite">
+            <div class="feature-icon">🤝</div>
+            <strong>Mời bạn bè</strong>
+            <small>Nhận điểm</small>
+        </a>
+
+        <a href="/tui-mu" class="feature blind">
+            <div class="feature-icon">🛍️</div>
+            <strong>Túi mù</strong>
+            <small>Mở quà ngẫu nhiên</small>
+        </a>
+
+        <a href="/huong-dan" class="feature guide">
+            <div class="feature-icon">📖</div>
+            <strong>Hướng dẫn</strong>
+            <small>Cách chơi</small>
+        </a>
+
+        <a href="/thong-tin" class="feature info">
+            <div class="feature-icon">ℹ️</div>
+            <strong>Thông tin web</strong>
+            <small>Về nền tảng</small>
+        </a>
+
+        <a href="/nhiem-vu" class="feature task">
+            <div class="feature-icon">🎯</div>
+            <strong>Nhiệm vụ</strong>
+            <small>Nhận điểm mỗi ngày</small>
+        </a>
+
+    </section>
+
+
+    <!-- DAILY TASK -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>🔥 Nhiệm vụ hàng ngày</h2>
+                <p>Hoàn thành để nhận điểm</p>
+            </div>
+
+            <a href="/nhiem-vu">
+                Xem tất cả →
+            </a>
+
+        </div>
+
+
+        <div class="task-list">
+
+            <div class="task-row">
+
+                <div class="task-left">
+                    <div class="task-icon">📅</div>
+
+                    <div>
+                        <strong>Điểm danh mỗi ngày</strong>
+                        <span>Đăng nhập hôm nay</span>
+                    </div>
+                </div>
+
+                <div class="task-reward">
+                    +100
+                </div>
+
+                <button onclick="claimTask(this)">
+                    Nhận
+                </button>
+
+            </div>
+
+
+            <div class="task-row">
+
+                <div class="task-left">
+                    <div class="task-icon">❓</div>
+
+                    <div>
+                        <strong>Trả lời 10 câu hỏi</strong>
+                        <span>Đã hoàn thành 5/10</span>
+                    </div>
+                </div>
+
+                <div class="task-reward">
+                    +500
+                </div>
+
+                <a href="/quiz" class="task-button">
+                    Làm ngay
+                </a>
+
+            </div>
+
+
+            <div class="task-row">
+
+                <div class="task-left">
+                    <div class="task-icon">👥</div>
+
+                    <div>
+                        <strong>Mời 3 bạn tham gia</strong>
+                        <span>Đã hoàn thành 0/3</span>
+                    </div>
+                </div>
+
+                <div class="task-reward">
+                    +300
+                </div>
+
+                <a href="/moi-ban" class="task-button">
+                    Mời bạn
+                </a>
+
+            </div>
+
+
+            <div class="task-row">
+
+                <div class="task-left">
+                    <div class="task-icon">⏱️</div>
+
+                    <div>
+                        <strong>Tham gia 3 phút mỗi ngày</strong>
+                        <span>0/3 phút</span>
+                    </div>
+                </div>
+
+                <div class="task-reward">
+                    +200
+                </div>
+
+                <button onclick="showMessage('Hãy ở lại trang 3 phút nhé!')">
+                    Làm ngay
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUIZ -->
+    <section class="section quiz-card">
+
+        <div class="section-header">
+
+            <div>
+                <h2>❓ Câu hỏi nổi bật</h2>
+                <p>Trả lời đúng nhận điểm</p>
+            </div>
+
+            <span class="reward">
+                +100 điểm
+            </span>
+
+        </div>
+
+
+        <div class="question">
+            Thủ đô của Việt Nam là thành phố nào?
+        </div>
+
+
+        <label class="answer">
+            <input type="radio"
+                   name="question"
+                   value="a">
+            <span>TP. Hồ Chí Minh</span>
+        </label>
+
+
+        <label class="answer">
+            <input type="radio"
+                   name="question"
+                   value="b">
+            <span>Hà Nội</span>
+        </label>
+
+
+        <label class="answer">
+            <input type="radio"
+                   name="question"
+                   value="c">
+            <span>Đà Nẵng</span>
+        </label>
+
+
+        <label class="answer">
+            <input type="radio"
+                   name="question"
+                   value="d">
+            <span>Hải Phòng</span>
+        </label>
+
+
+        <button class="submit"
+                onclick="checkAnswer()">
+
+            XÁC NHẬN CÂU TRẢ LỜI
+
+        </button>
+
+    </section>
+
+
+    <!-- LEADERBOARD -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>🏆 Bảng vàng Rút tiền</h2>
+                <p>Thành tích người chơi</p>
+            </div>
+
+            <span>
+                Top 5
+            </span>
+
+        </div>
+
+
+        <div class="leaderboard">
+
+            <div class="leader-row">
+
+                <div class="rank gold">
+                    1
+                </div>
+
+                <div class="avatar">
+                    👨🏻
+                </div>
+
+                <div class="player">
+                    <strong>thihang209</strong>
+                    <span>Thành viên tích cực</span>
+                </div>
+
+                <b>
+                    500.000đ
+                </b>
+
+            </div>
+
+
+            <div class="leader-row">
+
+                <div class="rank silver">
+                    2
+                </div>
+
+                <div class="avatar">
+                    👩🏻
+                </div>
+
+                <div class="player">
+                    <strong>David202</strong>
+                    <span>Thành viên</span>
+                </div>
+
+                <b>
+                    250.000đ
+                </b>
+
+            </div>
+
+
+            <div class="leader-row">
+
+                <div class="rank bronze">
+                    3
+                </div>
+
+                <div class="avatar">
+                    👨🏼
+                </div>
+
+                <div class="player">
+                    <strong>Alex99</strong>
+                    <span>Thành viên</span>
+                </div>
+
+                <b>
+                    200.000đ
+                </b>
+
+            </div>
+
+
+            <div class="leader-row">
+
+                <div class="rank">
+                    4
+                </div>
+
+                <div class="avatar">
+                    👩🏼
+                </div>
+
+                <div class="player">
+                    <strong>hoangnam_dz</strong>
+                    <span>Thành viên</span>
+                </div>
+
+                <b>
+                    150.000đ
+                </b>
+
+            </div>
+
+
+            <div class="leader-row">
+
+                <div class="rank">
+                    5
+                </div>
+
+                <div class="avatar">
+                    👨🏻
+                </div>
+
+                <div class="player">
+                    <strong>minhquan_99</strong>
+                    <span>Thành viên</span>
+                </div>
+
+                <b>
+                    100.000đ
+                </b>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INFO -->
+    <section class="info-box">
+
+        <div>🎁</div>
+
+        <div>
+            <strong>Đố Vui Đổi Quà</strong>
+
+            <p>
+                Trả lời câu hỏi, hoàn thành nhiệm vụ
+                và tích điểm thưởng.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- FLOATING SUPPORT -->
+    <a href="/cskh"
+       class="support">
+
+        🎧
+
+        <span>
+            CSKH
+        </span>
+
+    </a>
+
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+
+        <a href="/" class="active">
+            🏠
+            <span>Trang chủ</span>
+        </a>
+
+        <a href="/quiz">
+            ❓
+            <span>Câu hỏi</span>
+        </a>
+
+        <a href="/rut-tien">
+            💰
+            <span>Ví của tôi</span>
+        </a>
+
+        <a href="/thong-tin">
+            👤
+            <span>Tài khoản</span>
+        </a>
+
+    </nav>
+
 </div>
 
-<!-- 5. KHU VỰC BẢNG XẾP HẠNG -->
-<div class="section-title" style="margin-top: 20px;">
-    Bảng vàng Rút tiền
-</div>
-<div class="list-card">
-    <div class="list-card-left">
-        <div class="list-card-icon" style="background: #fef08a; font-size: 24px;">🥇</div>
-        <div class="list-card-info">
-            <h4>HoangNam99</h4>
-            <p>Đã rút: 500 USDT</p>
-        </div>
-    </div>
-    <span style="font-weight: 800; color: #10b981;">+ VIP 5</span>
-</div>
-<div class="list-card">
-    <div class="list-card-left">
-        <div class="list-card-icon" style="background: #e2e8f0; font-size: 24px;">🥈</div>
-        <div class="list-card-info">
-            <h4>Thihang209</h4>
-            <p>Đã rút: 350 USDT</p>
-        </div>
-    </div>
-    <span style="font-weight: 800; color: #10b981;">+ VIP 4</span>
+
+<!-- MESSAGE -->
+<div id="message"
+     class="message">
 </div>
 
-<!-- Nút CSKH Nổi -->
-<a href="/cskh" class="cskh-btn">🎧</a>
 
 <script>
-    const usernames = ["David202", "thihang209", "Alex99", "minhtuan_88", "JohnDoe_US", "lanhuong.vo", "Ken_Crypto", "ngocanh2k", "hoangnam_dz", "Sarah_lin"];
-    const rewards = ["50 USDT", "100.000 VNĐ", "thẻ cào 50k", "10 USDT", "500.000 VNĐ", "Túi mù VIP"];
-    const actions = ["vừa rút thành công", "vừa đổi thưởng", "vừa mở trúng"];
 
-    function generateTickerContent() {
-        let content = "";
-        for(let i = 0; i < 6; i++) {
-            let randomName = usernames[Math.floor(Math.random() * usernames.length)];
-            let randomReward = rewards[Math.floor(Math.random() * rewards.length)];
-            let randomAction = actions[Math.floor(Math.random() * actions.length)];
-            content += `🎉 Chúc mừng <b>${randomName}</b> ${randomAction} <b>${randomReward}</b>! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `;
-        }
-        return content;
+const rewards = [
+    "hoangnam_dz vừa nhận 100.000 VNĐ 🎉",
+    "thihang209 vừa nhận thẻ cào 50K 🎁",
+    "David202 vừa đổi 50 USDT 💰",
+    "Alex99 vừa nhận 100.000 VNĐ 🔥",
+    "minhquan_99 vừa hoàn thành nhiệm vụ ⭐",
+    "ngocanh88 vừa nhận phần thưởng 🎁"
+];
+
+
+function updateTicker() {
+
+    const ticker =
+        document.getElementById("tickerText");
+
+    const random =
+        rewards[Math.floor(Math.random() * rewards.length)];
+
+    ticker.classList.remove("ticker-animation");
+
+    void ticker.offsetWidth;
+
+    ticker.textContent =
+        "🎉 " + random;
+
+    ticker.classList.add("ticker-animation");
+}
+
+
+updateTicker();
+
+setInterval(updateTicker, 5000);
+
+
+function changeLanguage() {
+
+    const language =
+        document.getElementById("language");
+
+    if (language.textContent === "VN") {
+
+        language.textContent = "EN";
+
+        showMessage(
+            "English interface demo"
+        );
+
+    } else {
+
+        language.textContent = "VN";
+
+        showMessage(
+            "Đã chuyển sang Tiếng Việt"
+        );
+    }
+}
+
+
+function checkAnswer() {
+
+    const selected =
+        document.querySelector(
+            'input[name="question"]:checked'
+        );
+
+    if (!selected) {
+
+        showMessage(
+            "⚠️ Hãy chọn một đáp án!"
+        );
+
+        return;
     }
 
-    document.getElementById("dynamic-ticker").innerHTML = generateTickerContent();
+
+    if (selected.value === "b") {
+
+        showMessage(
+            "🎉 Chính xác! +100 điểm demo"
+        );
+
+    } else {
+
+        showMessage(
+            "❌ Chưa đúng, thử lại nhé!"
+        );
+    }
+}
+
+
+function claimTask(button) {
+
+    button.disabled = true;
+
+    button.textContent = "Đã nhận";
+
+    showMessage(
+        "🎉 Đã nhận +100 điểm demo"
+    );
+}
+
+
+function showMessage(text) {
+
+    const message =
+        document.getElementById("message");
+
+    message.textContent = text;
+
+    message.classList.add("show");
+
+    setTimeout(() => {
+
+        message.classList.remove("show");
+
+    }, 2500);
+}
+
 </script>
-{% endblock %}
+
+</body>
+</html>
