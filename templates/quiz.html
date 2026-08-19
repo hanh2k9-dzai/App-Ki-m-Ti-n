@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="quiz-container">
+    <h2 class="page-title" style="margin-bottom: 15px; font-size: 18px; color: #1e293b;">Trả Lời Câu Hỏi</h2>
+
+    <!-- Ad Unit Place 1 -->
+    <div class="ad-box">
+        <p>[Quảng Cáo Banner 320x50]</p>
+    </div>
+
+    {% if question %}
+    <div class="quiz-card" id="quiz-box" data-id="{{ question.id }}">
+        <h3 class="question-text">{{ question.title }}</h3>
+        
+        <div class="timer-box" id="timer-box">
+            <i class="fa-solid fa-clock"></i> Vui lòng chờ <span id="timer">15</span>s để chọn đáp án...
+        </div>
+
+        <div class="options-list">
+            <button class="opt-btn" onclick="selectOption('A')" disabled>A. {{ question.option_a }}</button>
+            <button class="opt-btn" onclick="selectOption('B')" disabled>B. {{ question.option_b }}</button>
+            <button class="opt-btn" onclick="selectOption('C')" disabled>C. {{ question.option_c }}</button>
+            <button class="opt-btn" onclick="selectOption('D')" disabled>D. {{ question.option_d }}</button>
+        </div>
+
+        <!-- Ad Unit Place 2 -->
+        <div class="ad-box style-small">
+            <p>[Quảng Cáo Native]</p>
+        </div>
+
+        <button id="submit-btn" class="btn-submit" onclick="submitAnswer()" disabled>GỬI CÂU TRẢ LỜI</button>
+    </div>
+    {% else %}
+    <p>Hiện tại đã hết câu hỏi, vui lòng quay lại sau!</p>
+    {% endif %}
+</div>
+{% endblock %}
