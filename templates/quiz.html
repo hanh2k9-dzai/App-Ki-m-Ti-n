@@ -1,195 +1,1141 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="vi">
 
-{% block content %}
-<style>
-    .quiz-card {
-        background: #ffffff;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    .ad-box {
-        background: #f8fafc;
-        border: 1px dashed #cbd5e1;
-        border-radius: 12px;
-        padding: 10px;
-        text-align: center;
-        margin: 15px 0;
-        min-height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .timer-box {
-        background: #eff6ff;
-        border: 1px solid #bfdbfe;
-        color: #1e40af;
-        padding: 12px;
-        border-radius: 12px;
-        font-size: 13px;
-        font-weight: 600;
-        margin: 15px 0;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .options-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 15px;
-    }
-    .opt-btn {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        padding: 14px;
-        border-radius: 12px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #334155;
-        text-align: left;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    .opt-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-    .opt-btn.selected {
-        background: #0284c7;
-        color: #ffffff;
-        border-color: #0284c7;
-    }
-    .submit-btn {
-        width: 100%;
-        background: #cbd5e1;
-        color: #64748b;
-        border: none;
-        padding: 14px;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 14px;
-        margin-top: 20px;
-        cursor: not-allowed;
-        transition: all 0.2s ease;
-    }
-    .submit-btn.active {
-        background: #0284c7;
-        color: #ffffff;
-        cursor: pointer;
-    }
-    .result-msg {
-        margin-top: 15px;
-        padding: 12px;
-        border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
-        text-align: center;
-        display: none;
-    }
-</style>
+<head>
+    <meta charset="UTF-8">
 
-<div class="quiz-card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="font-size: 18px; color: #0f172a; font-weight: 800;">Trả Lời Câu Hỏi</h2>
-        <span style="font-size: 12px; font-weight: bold; color: #16a34a; background: #dcfce7; padding: 4px 10px; border-radius: 20px;">+{{ question.points }} POINT</span>
-    </div>
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0,
+                   maximum-scale=1.0,
+                   user-scalable=no">
 
-    <!-- Ô QUẢNG CÁO MONETAG (ZONE 271292) -->
-    <div class="ad-box">
-        <script src="https://quge5.com/88/tag.min.js" data-zone="271292" async data-cfasync="false"></script>
-    </div>
+    <title>🎁 Đố Vui Đổi Quà - Quiz</title>
 
-    <!-- Nội dung câu hỏi ngẫu nhiên từ Python -->
-    <h3 style="font-size: 16px; color: #1e293b; margin: 15px 0 10px; font-weight: 700;">{{ question.question }}</h3>
+    <style>
 
-    <!-- Khung đếm ngược 15s -->
-    <div class="timer-box" id="timer-status">
-        <i class="fa-regular fa-clock"></i>
-        <span>Vui lòng chờ <b id="countdown" style="color: #ef4444; font-size: 16px;">15</b>s để chọn đáp án...</span>
-    </div>
-
-    <!-- Danh sách đáp án ngẫu nhiên -->
-    <div class="options-grid">
-        {% for opt in question.options %}
-        <button class="opt-btn" disabled onclick="selectAnswer(this, '{{ opt }}')">{{ opt }}</button>
-        {% endfor %}
-    </div>
-
-    <!-- Nút gửi kết quả -->
-    <button id="btn-submit" class="submit-btn" disabled onclick="submitQuiz()">GỬI CÂU TRẢ LỜI</button>
-
-    <!-- Thẻ hiển thị thông báo đúng/sai -->
-    <div id="result-message" class="result-msg"></div>
-</div>
-
-<script>
-    let seconds = 15;
-    let selectedOption = "";
-    const questionId = {{ question.id }};
-
-    const countdownEl = document.getElementById('countdown');
-    const timerStatus = document.getElementById('timer-status');
-    const optButtons = document.querySelectorAll('.opt-btn');
-    const submitBtn = document.getElementById('btn-submit');
-
-    // Chạy đếm ngược 15s
-    const timer = setInterval(() => {
-        seconds--;
-        if (countdownEl) countdownEl.innerText = seconds;
-
-        if (seconds <= 0) {
-            clearInterval(timer);
-            timerStatus.style.background = '#f0fdf4';
-            timerStatus.style.borderColor = '#bbf7d0';
-            timerStatus.style.color = '#166534';
-            timerStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Đã hết 15s! Mời bạn chọn đáp án.';
-            
-            // Mở khóa nút bấm chọn đáp án
-            optButtons.forEach(btn => btn.removeAttribute('disabled'));
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-    }, 1000);
 
-    function selectAnswer(element, val) {
-        selectedOption = val;
-        optButtons.forEach(btn => btn.classList.remove('selected'));
-        element.classList.add('selected');
-        
-        submitBtn.removeAttribute('disabled');
-        submitBtn.classList.add('active');
-    }
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
 
-    function submitQuiz() {
-        if (!selectedOption) return;
+            background:
+                linear-gradient(
+                    180deg,
+                    #f4f7ff 0%,
+                    #eef5ff 100%
+                );
 
-        fetch('/submit-answer', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                question_id: questionId,
-                answer: selectedOption
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            const msgBox = document.getElementById('result-message');
-            msgBox.style.display = 'block';
-            
-            if (data.status === 'success') {
-                msgBox.style.background = '#dcfce7';
-                msgBox.style.color = '#15803d';
-                msgBox.innerText = data.message;
-            } else {
-                msgBox.style.background = '#fee2e2';
-                msgBox.style.color = '#b91c1c';
-                msgBox.innerText = data.message;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+
+        /* APP */
+
+        .app {
+            width: 100%;
+            max-width: 520px;
+            margin: auto;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+
+        /* HEADER */
+
+        .header {
+            height: 68px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 18px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #e8ebf2;
+
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+
+        .back {
+            text-decoration: none;
+
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #1d63e9;
+
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+
+        .score-box {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff5c7,
+                    #ffe79a
+                );
+
+            border-radius: 22px;
+
+            padding: 9px 15px;
+
+            color: #8a5b00;
+
+            font-weight: 800;
+
+            box-shadow:
+                0 4px 15px
+                rgba(255, 190, 0, .15);
+        }
+
+
+        .score-number {
+            font-size: 18px;
+        }
+
+
+        /* CONTENT */
+
+        .content {
+            padding: 20px 16px;
+        }
+
+
+        /* PROGRESS */
+
+        .progress-area {
+            margin-bottom: 18px;
+        }
+
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 8px;
+        }
+
+
+        .question-number {
+            font-weight: 800;
+            color: #3d4b66;
+        }
+
+
+        .points-label {
+            color: #ff9800;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+
+            background: #dfe5ef;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .progress-fill {
+            height: 100%;
+
+            width: 10%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1769e0,
+                    #00b8d9
+                );
+
+            border-radius: 20px;
+
+            transition: width .35s ease;
+        }
+
+
+        /* QUESTION CARD */
+
+        .question-card {
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 26px 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 8px 30px
+                rgba(30, 70, 130, .09);
+
+            margin-bottom: 18px;
+        }
+
+
+        .question-icon {
+            width: 60px;
+            height: 60px;
+
+            margin: 0 auto 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #edf5ff,
+                    #dbeaff
+                );
+
+            font-size: 30px;
+        }
+
+
+        .question-text {
+            font-size: 21px;
+            line-height: 1.4;
+
+            font-weight: 800;
+
+            color: #18243a;
+        }
+
+
+        /* ANSWERS */
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .answer {
+            width: 100%;
+
+            min-height: 64px;
+
+            padding: 12px 14px;
+
+            display: flex;
+            align-items: center;
+
+            border: 2px solid #e3e8f0;
+
+            background: white;
+
+            border-radius: 17px;
+
+            cursor: pointer;
+
+            transition:
+                transform .15s,
+                border-color .15s,
+                background .15s;
+
+            box-shadow:
+                0 4px 15px
+                rgba(30, 60, 100, .04);
+        }
+
+
+        .answer:active {
+            transform: scale(.98);
+        }
+
+
+        .answer-letter {
+            width: 39px;
+            height: 39px;
+
+            flex-shrink: 0;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #edf2fa;
+
+            color: #4a5870;
+
+            font-weight: 900;
+
+            margin-right: 12px;
+        }
+
+
+        .answer-text {
+            font-size: 16px;
+            font-weight: 700;
+
+            color: #26334a;
+
+            text-align: left;
+        }
+
+
+        /* CORRECT */
+
+        .answer.correct {
+            border-color: #18b56b;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #edfff6,
+                    #d8fbea
+                );
+        }
+
+
+        .answer.correct .answer-letter {
+            background: #18b56b;
+            color: white;
+        }
+
+
+        /* WRONG */
+
+        .answer.wrong {
+            border-color: #ef4444;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff0f0,
+                    #ffe1e1
+                );
+        }
+
+
+        .answer.wrong .answer-letter {
+            background: #ef4444;
+            color: white;
+        }
+
+
+        /* DISABLED */
+
+        .answer.disabled {
+            cursor: default;
+        }
+
+
+        /* RESULT */
+
+        .result {
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 18px;
+
+            border-radius: 18px;
+
+            text-align: center;
+
+            font-weight: 800;
+
+            animation:
+                resultIn .3s ease;
+        }
+
+
+        .result.show {
+            display: block;
+        }
+
+
+        .result.success {
+            background: #e4faee;
+            color: #08783f;
+        }
+
+
+        .result.fail {
+            background: #ffebeb;
+            color: #b42323;
+        }
+
+
+        @keyframes resultIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(8px);
             }
 
-            // Tự động load câu hỏi mới sau 2 giây
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        });
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* NEXT BUTTON */
+
+        .next-button {
+            width: 100%;
+
+            margin-top: 16px;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1769e0,
+                    #124fc0
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 900;
+
+            box-shadow:
+                0 8px 20px
+                rgba(23, 105, 224, .25);
+
+            display: none;
+
+            cursor: pointer;
+        }
+
+
+        .next-button.show {
+            display: block;
+        }
+
+
+        /* FINISH */
+
+        .finish {
+            display: none;
+
+            text-align: center;
+
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 35px 20px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(30, 70, 130, .09);
+        }
+
+
+        .finish.show {
+            display: block;
+        }
+
+
+        .finish-icon {
+            font-size: 65px;
+            margin-bottom: 12px;
+        }
+
+
+        .finish h2 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+
+        .final-score {
+            font-size: 38px;
+
+            color: #1769e0;
+
+            font-weight: 900;
+
+            margin: 15px 0;
+        }
+
+
+        .home-button {
+            display: block;
+
+            text-decoration: none;
+
+            padding: 15px;
+
+            border-radius: 16px;
+
+            background: #1769e0;
+
+            color: white;
+
+            font-weight: 800;
+
+            margin-top: 20px;
+        }
+
+
+        /* +10 ANIMATION */
+
+        .point-pop {
+            position: fixed;
+
+            top: 75px;
+            right: 20px;
+
+            color: #11a85a;
+
+            font-size: 25px;
+
+            font-weight: 900;
+
+            pointer-events: none;
+
+            animation:
+                pointPop 1s ease forwards;
+
+            z-index: 100;
+        }
+
+
+        @keyframes pointPop {
+
+            0% {
+                opacity: 0;
+                transform:
+                    translateY(10px)
+                    scale(.7);
+            }
+
+            25% {
+                opacity: 1;
+                transform:
+                    translateY(0)
+                    scale(1.1);
+            }
+
+            100% {
+                opacity: 0;
+                transform:
+                    translateY(-45px)
+                    scale(1);
+            }
+
+        }
+
+
+        /* DESKTOP */
+
+        @media (min-width: 700px) {
+
+            body {
+                padding: 20px 0;
+            }
+
+            .app {
+                border-radius: 25px;
+                overflow: hidden;
+
+                box-shadow:
+                    0 10px 50px
+                    rgba(0,0,0,.08);
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <a href="/" class="back">
+            ← Trang chủ
+        </a>
+
+        <div class="score-box">
+            🪙
+            <span id="score">0</span>
+            điểm
+        </div>
+
+    </header>
+
+
+    <main class="content">
+
+
+        <!-- GAME -->
+
+        <div id="game">
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-area">
+
+                <div class="progress-top">
+
+                    <span
+                        id="questionNumber"
+                        class="question-number">
+
+                        Câu 1/10
+
+                    </span>
+
+                    <span class="points-label">
+                        +10 điểm/câu
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        id="progressFill"
+                        class="progress-fill">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUESTION -->
+
+            <section class="question-card">
+
+                <div class="question-icon">
+                    ❓
+                </div>
+
+                <div
+                    id="questionText"
+                    class="question-text">
+
+                    Đang tải câu hỏi...
+
+                </div>
+
+            </section>
+
+
+            <!-- ANSWERS -->
+
+            <div
+                id="answers"
+                class="answers">
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div
+                id="result"
+                class="result">
+            </div>
+
+
+            <!-- NEXT -->
+
+            <button
+                id="nextButton"
+                class="next-button"
+                onclick="nextQuestion()">
+
+                Câu tiếp theo →
+
+            </button>
+
+        </div>
+
+
+        <!-- FINISH -->
+
+        <section
+            id="finish"
+            class="finish">
+
+            <div class="finish-icon">
+                🏆
+            </div>
+
+            <h2>
+                Hoàn thành!
+            </h2>
+
+            <p>
+                Bạn đã hoàn thành toàn bộ câu hỏi.
+            </p>
+
+            <div
+                id="finalScore"
+                class="final-score">
+
+                0 điểm
+
+            </div>
+
+            <a
+                href="/"
+                class="home-button">
+
+                ← Về trang chủ
+
+            </a>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+let currentQuestion = 0;
+let totalQuestions = {{ total }};
+let answered = false;
+
+
+/* =========================
+   LOAD QUESTION
+========================= */
+
+async function loadQuestion() {
+
+    answered = false;
+
+    const questionText =
+        document.getElementById("questionText");
+
+    const answers =
+        document.getElementById("answers");
+
+    const result =
+        document.getElementById("result");
+
+    const nextButton =
+        document.getElementById("nextButton");
+
+
+    result.className = "result";
+    result.textContent = "";
+
+    nextButton.classList.remove("show");
+
+
+    questionText.textContent =
+        "Đang tải câu hỏi...";
+
+    answers.innerHTML = "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/quiz/question/${currentQuestion}`
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+            return;
+        }
+
+
+        questionText.textContent =
+            data.question;
+
+
+        document.getElementById(
+            "questionNumber"
+        ).textContent =
+            `Câu ${currentQuestion + 1}/${totalQuestions}`;
+
+
+        const percent =
+            ((currentQuestion + 1)
+            / totalQuestions) * 100;
+
+
+        document.getElementById(
+            "progressFill"
+        ).style.width =
+            `${percent}%`;
+
+
+        const letters =
+            ["A", "B", "C", "D"];
+
+
+        data.answers.forEach(
+            (answer, index) => {
+
+                const button =
+                    document.createElement("button");
+
+                button.className =
+                    "answer";
+
+
+                button.innerHTML = `
+
+                    <span class="answer-letter">
+                        ${letters[index]}
+                    </span>
+
+                    <span class="answer-text">
+                        ${answer}
+                    </span>
+
+                `;
+
+
+                button.onclick = () =>
+                    selectAnswer(
+                        index,
+                        button
+                    );
+
+
+                answers.appendChild(button);
+
+            }
+        );
+
+    } catch (error) {
+
+        questionText.textContent =
+            "Không thể tải câu hỏi.";
+
+        console.error(error);
+
     }
+
+}
+
+
+/* =========================
+   SELECT ANSWER
+========================= */
+
+async function selectAnswer(
+    selectedIndex,
+    selectedButton
+) {
+
+    if (answered) {
+        return;
+    }
+
+    answered = true;
+
+
+    const allAnswers =
+        document.querySelectorAll(".answer");
+
+
+    allAnswers.forEach(
+        button => {
+
+            button.classList.add(
+                "disabled"
+            );
+
+        }
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/quiz/answer",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        index:
+                            currentQuestion,
+
+                        answer:
+                            selectedIndex
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            showResult(
+                "⚠️ " + data.message,
+                false
+            );
+
+            return;
+
+        }
+
+
+        /* CẬP NHẬT ĐIỂM */
+
+        document.getElementById(
+            "score"
+        ).textContent =
+            data.score;
+
+
+        /* ĐÚNG */
+
+        if (data.correct) {
+
+            selectedButton.classList.add(
+                "correct"
+            );
+
+
+            showResult(
+                "🎉 Chính xác! +10 điểm",
+                true
+            );
+
+
+            showPointAnimation();
+
+
+        }
+
+        /* SAI */
+
+        else {
+
+            selectedButton.classList.add(
+                "wrong"
+            );
+
+
+            allAnswers[
+                data.correctAnswer
+            ].classList.add(
+                "correct"
+            );
+
+
+            showResult(
+                "❌ Chưa đúng! Đáp án đúng đã được đánh dấu.",
+                false
+            );
+
+        }
+
+
+        document.getElementById(
+            "nextButton"
+        ).classList.add("show");
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showResult(
+            "⚠️ Có lỗi kết nối máy chủ.",
+            false
+        );
+
+    }
+
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+function showResult(
+    text,
+    success
+) {
+
+    const result =
+        document.getElementById("result");
+
+
+    result.textContent = text;
+
+
+    result.className =
+        "result show " +
+        (success
+            ? "success"
+            : "fail");
+
+}
+
+
+/* =========================
+   NEXT QUESTION
+========================= */
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+
+    if (
+        currentQuestion >=
+        totalQuestions
+    ) {
+
+        finishQuiz();
+
+        return;
+
+    }
+
+
+    loadQuestion();
+
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+function finishQuiz() {
+
+    document.getElementById(
+        "game"
+    ).style.display = "none";
+
+
+    const finish =
+        document.getElementById("finish");
+
+
+    finish.classList.add("show");
+
+
+    const score =
+        document.getElementById(
+            "score"
+        ).textContent;
+
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        `${score} điểm`;
+
+}
+
+
+/* =========================
+   +10 ANIMATION
+========================= */
+
+function showPointAnimation() {
+
+    const pop =
+        document.createElement("div");
+
+
+    pop.className =
+        "point-pop";
+
+
+    pop.textContent =
+        "+10 điểm";
+
+
+    document.body.appendChild(pop);
+
+
+    setTimeout(
+        () => pop.remove(),
+        1000
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadQuestion();
+
 </script>
-{% endblock %}
+
+</body>
+
+</html>
