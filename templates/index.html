@@ -2,13 +2,220 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>🎁 Đố Vui Đổi Quà</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* ================================
+           ĐIỂM DANH 7 NGÀY
+        ================================= */
+
+        .checkin-card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(
+                135deg,
+                #fff7ed,
+                #fff
+            );
+            border: 1px solid #fed7aa;
+            box-shadow: 0 8px 25px rgba(0,0,0,.06);
+        }
+
+        .checkin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .checkin-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .checkin-header p {
+            margin: 5px 0 0;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .streak-badge {
+            background: #ffedd5;
+            color: #ea580c;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .checkin-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 7px;
+        }
+
+        .checkin-day {
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 13px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        .checkin-day .day-number {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .checkin-day .day-icon {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+
+        .checkin-day .day-point {
+            font-size: 11px;
+            font-weight: 700;
+            color: #f97316;
+        }
+
+        .checkin-day.done {
+            background: linear-gradient(
+                135deg,
+                #22c55e,
+                #16a34a
+            );
+            color: white;
+            border-color: #16a34a;
+        }
+
+        .checkin-day.done .day-number,
+        .checkin-day.done .day-point {
+            color: white;
+        }
+
+        .checkin-day.current {
+            border: 2px solid #f97316;
+        }
+
+        .checkin-action {
+            margin-top: 18px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .checkin-button {
+            flex: 1;
+            border: 0;
+            border-radius: 14px;
+            padding: 13px;
+            background: linear-gradient(
+                135deg,
+                #f97316,
+                #ea580c
+            );
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .checkin-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .checkin-info {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* ================================
+           RÚT TIỀN
+        ================================= */
+
+        .withdraw-card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 20px;
+            background: linear-gradient(
+                135deg,
+                #eff6ff,
+                #ffffff
+            );
+            border: 1px solid #bfdbfe;
+        }
+
+        .withdraw-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .withdraw-item {
+            padding: 14px;
+            border-radius: 14px;
+            background: white;
+            border: 1px solid #dbeafe;
+            text-align: center;
+        }
+
+        .withdraw-item strong {
+            display: block;
+            color: #2563eb;
+            font-size: 16px;
+        }
+
+        .withdraw-item span {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .withdraw-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            padding: 13px;
+            border-radius: 13px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        @media (max-width: 500px) {
+
+            .checkin-days {
+                gap: 4px;
+            }
+
+            .checkin-day {
+                padding: 8px 2px;
+            }
+
+            .checkin-day .day-icon {
+                font-size: 17px;
+            }
+
+            .checkin-day .day-point {
+                font-size: 9px;
+            }
+
+            .withdraw-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -77,11 +284,11 @@
 
             <div class="balance-number">
                 <span id="userScore">0</span>
-                <small>điểm</small>
+                <small>xu</small>
             </div>
 
             <span class="balance-note">
-                🎁 Tiếp tục trả lời để nhận thêm điểm
+                🎁 Tiếp tục trả lời để nhận thêm xu
             </span>
 
         </div>
@@ -147,6 +354,57 @@
     </section>
 
 
+    <!-- ==========================================
+         ĐIỂM DANH 7 NGÀY
+    =========================================== -->
+
+    <section class="checkin-card">
+
+        <div class="checkin-header">
+
+            <div>
+                <h2>🔥 Điểm danh 7 ngày</h2>
+
+                <p>
+                    Điểm danh liên tục để tăng phần thưởng
+                </p>
+            </div>
+
+            <div class="streak-badge">
+                🔥 Chuỗi <span id="checkinStreak">0</span>
+            </div>
+
+        </div>
+
+
+        <div
+            id="checkinDays"
+            class="checkin-days">
+        </div>
+
+
+        <div class="checkin-action">
+
+            <button
+                id="checkinButton"
+                class="checkin-button"
+                onclick="checkinToday()">
+
+                📅 Điểm danh hôm nay
+
+            </button>
+
+        </div>
+
+        <div
+            id="checkinInfo"
+            class="checkin-info"
+            style="margin-top:10px;">
+        </div>
+
+    </section>
+
+
     <!-- DAILY TASK -->
     <section class="section">
 
@@ -166,23 +424,46 @@
 
         <div class="task-list">
 
+            <!-- ĐIỂM DANH ĐÃ NỐI API -->
+
             <div class="task-row">
 
                 <div class="task-left">
-                    <div class="task-icon">📅</div>
+
+                    <div class="task-icon">
+                        📅
+                    </div>
 
                     <div>
-                        <strong>Điểm danh mỗi ngày</strong>
-                        <span>Đăng nhập hôm nay</span>
+
+                        <strong>
+                            Điểm danh mỗi ngày
+                        </strong>
+
+                        <span id="taskCheckinText">
+                            Đang kiểm tra...
+                        </span>
+
                     </div>
+
                 </div>
 
-                <div class="task-reward">
+
+                <div
+                    id="taskCheckinReward"
+                    class="task-reward">
+
                     +100
+
                 </div>
 
-                <button onclick="claimTask(this)">
+
+                <button
+                    id="taskCheckinButton"
+                    onclick="checkinToday()">
+
                     Nhận
+
                 </button>
 
             </div>
@@ -191,20 +472,34 @@
             <div class="task-row">
 
                 <div class="task-left">
-                    <div class="task-icon">❓</div>
+
+                    <div class="task-icon">
+                        ❓
+                    </div>
 
                     <div>
-                        <strong>Trả lời 10 câu hỏi</strong>
-                        <span>Đã hoàn thành 5/10</span>
+
+                        <strong>
+                            Trả lời 10 câu hỏi
+                        </strong>
+
+                        <span>
+                            Hoàn thành để nhận thưởng
+                        </span>
+
                     </div>
+
                 </div>
 
                 <div class="task-reward">
                     +500
                 </div>
 
-                <a href="/quiz" class="task-button">
+                <a href="/quiz"
+                   class="task-button">
+
                     Làm ngay
+
                 </a>
 
             </div>
@@ -213,20 +508,34 @@
             <div class="task-row">
 
                 <div class="task-left">
-                    <div class="task-icon">👥</div>
+
+                    <div class="task-icon">
+                        👥
+                    </div>
 
                     <div>
-                        <strong>Mời 3 bạn tham gia</strong>
-                        <span>Đã hoàn thành 0/3</span>
+
+                        <strong>
+                            Mời 3 bạn tham gia
+                        </strong>
+
+                        <span>
+                            Đã hoàn thành 0/3
+                        </span>
+
                     </div>
+
                 </div>
 
                 <div class="task-reward">
                     +300
                 </div>
 
-                <a href="/moi-ban" class="task-button">
+                <a href="/moi-ban"
+                   class="task-button">
+
                     Mời bạn
+
                 </a>
 
             </div>
@@ -235,25 +544,112 @@
             <div class="task-row">
 
                 <div class="task-left">
-                    <div class="task-icon">⏱️</div>
+
+                    <div class="task-icon">
+                        ⏱️
+                    </div>
 
                     <div>
-                        <strong>Tham gia 3 phút mỗi ngày</strong>
-                        <span>0/3 phút</span>
+
+                        <strong>
+                            Tham gia 3 phút mỗi ngày
+                        </strong>
+
+                        <span>
+                            0/3 phút
+                        </span>
+
                     </div>
+
                 </div>
 
                 <div class="task-reward">
                     +200
                 </div>
 
-                <button onclick="showMessage('Hãy ở lại trang 3 phút nhé!')">
+                <button
+                    onclick="showMessage('Hãy ở lại trang 3 phút nhé!')">
+
                     Làm ngay
+
                 </button>
 
             </div>
 
         </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         QUY ĐỔI XU
+    =========================================== -->
+
+    <section class="withdraw-card">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    💰 Quy đổi xu
+                </h2>
+
+                <p>
+                    Xu tích lũy có thể đổi thành phần thưởng
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="withdraw-grid">
+
+            <div class="withdraw-item">
+                <strong>6.000 xu</strong>
+                <span>→ 5.000đ</span>
+            </div>
+
+            <div class="withdraw-item">
+                <strong>11.000 xu</strong>
+                <span>→ 10.000đ</span>
+            </div>
+
+            <div class="withdraw-item">
+                <strong>21.000 xu</strong>
+                <span>→ 20.000đ</span>
+            </div>
+
+            <div class="withdraw-item">
+                <strong>51.000 xu</strong>
+                <span>→ 50.000đ</span>
+            </div>
+
+            <div class="withdraw-item">
+                <strong>101.000 xu</strong>
+                <span>→ 100.000đ</span>
+            </div>
+
+            <div class="withdraw-item">
+                <strong>201.000 xu</strong>
+                <span>→ 200.000đ</span>
+            </div>
+
+            <div class="withdraw-item">
+                <strong>501.000 xu</strong>
+                <span>→ 500.000đ</span>
+            </div>
+
+        </div>
+
+
+        <a href="/rut-tien"
+           class="withdraw-link">
+
+            💳 RÚT TIỀN DEMO
+
+        </a>
 
     </section>
 
@@ -281,34 +677,54 @@
 
 
         <label class="answer">
+
             <input type="radio"
                    name="question"
                    value="a">
-            <span>TP. Hồ Chí Minh</span>
+
+            <span>
+                TP. Hồ Chí Minh
+            </span>
+
         </label>
 
 
         <label class="answer">
+
             <input type="radio"
                    name="question"
                    value="b">
-            <span>Hà Nội</span>
+
+            <span>
+                Hà Nội
+            </span>
+
         </label>
 
 
         <label class="answer">
+
             <input type="radio"
                    name="question"
                    value="c">
-            <span>Đà Nẵng</span>
+
+            <span>
+                Đà Nẵng
+            </span>
+
         </label>
 
 
         <label class="answer">
+
             <input type="radio"
                    name="question"
                    value="d">
-            <span>Hải Phòng</span>
+
+            <span>
+                Hải Phòng
+            </span>
+
         </label>
 
 
@@ -342,112 +758,67 @@
         <div class="leaderboard">
 
             <div class="leader-row">
-
-                <div class="rank gold">
-                    1
-                </div>
-
-                <div class="avatar">
-                    👨🏻
-                </div>
+                <div class="rank gold">1</div>
+                <div class="avatar">👨🏻</div>
 
                 <div class="player">
                     <strong>thihang209</strong>
                     <span>Thành viên tích cực</span>
                 </div>
 
-                <b>
-                    500.000đ
-                </b>
-
+                <b>500.000đ</b>
             </div>
 
 
             <div class="leader-row">
-
-                <div class="rank silver">
-                    2
-                </div>
-
-                <div class="avatar">
-                    👩🏻
-                </div>
+                <div class="rank silver">2</div>
+                <div class="avatar">👩🏻</div>
 
                 <div class="player">
                     <strong>David202</strong>
                     <span>Thành viên</span>
                 </div>
 
-                <b>
-                    250.000đ
-                </b>
-
+                <b>250.000đ</b>
             </div>
 
 
             <div class="leader-row">
-
-                <div class="rank bronze">
-                    3
-                </div>
-
-                <div class="avatar">
-                    👨🏼
-                </div>
+                <div class="rank bronze">3</div>
+                <div class="avatar">👨🏼</div>
 
                 <div class="player">
                     <strong>Alex99</strong>
                     <span>Thành viên</span>
                 </div>
 
-                <b>
-                    200.000đ
-                </b>
-
+                <b>200.000đ</b>
             </div>
 
 
             <div class="leader-row">
-
-                <div class="rank">
-                    4
-                </div>
-
-                <div class="avatar">
-                    👩🏼
-                </div>
+                <div class="rank">4</div>
+                <div class="avatar">👩🏼</div>
 
                 <div class="player">
                     <strong>hoangnam_dz</strong>
                     <span>Thành viên</span>
                 </div>
 
-                <b>
-                    150.000đ
-                </b>
-
+                <b>150.000đ</b>
             </div>
 
 
             <div class="leader-row">
-
-                <div class="rank">
-                    5
-                </div>
-
-                <div class="avatar">
-                    👨🏻
-                </div>
+                <div class="rank">5</div>
+                <div class="avatar">👨🏻</div>
 
                 <div class="player">
                     <strong>minhquan_99</strong>
                     <span>Thành viên</span>
                 </div>
 
-                <b>
-                    100.000đ
-                </b>
-
+                <b>100.000đ</b>
             </div>
 
         </div>
@@ -461,18 +832,22 @@
         <div>🎁</div>
 
         <div>
-            <strong>Đố Vui Đổi Quà</strong>
+
+            <strong>
+                Đố Vui Đổi Quà
+            </strong>
 
             <p>
                 Trả lời câu hỏi, hoàn thành nhiệm vụ
                 và tích điểm thưởng.
             </p>
+
         </div>
 
     </section>
 
 
-    <!-- FLOATING SUPPORT -->
+    <!-- SUPPORT -->
     <a href="/cskh"
        class="support">
 
@@ -605,7 +980,7 @@ function changeLanguage() {
 
 
 /* ==================================================
-   QUIZ TRÊN TRANG CHỦ
+   QUIZ
 ================================================== */
 
 function checkAnswer() {
@@ -625,9 +1000,7 @@ function checkAnswer() {
     }
 
 
-    if (
-        selected.value === "b"
-    ) {
+    if (selected.value === "b") {
 
         showMessage(
             "🎉 Chính xác! Hãy vào Quiz để nhận điểm"
@@ -643,64 +1016,36 @@ function checkAnswer() {
 
 
 /* ==================================================
-   NHẬN NHIỆM VỤ DEMO
-================================================== */
-
-function claimTask(button) {
-
-    if (!button) return;
-
-    button.disabled = true;
-
-    button.textContent =
-        "Đã nhận";
-
-    showMessage(
-        "🎉 Đã nhận +100 điểm demo"
-    );
-}
-
-
-/* ==================================================
    MESSAGE
 ================================================== */
 
 function showMessage(text) {
 
     const message =
-        document.getElementById(
-            "message"
-        );
+        document.getElementById("message");
 
     if (!message) return;
 
-    message.textContent =
-        text;
+    message.textContent = text;
 
-    message.classList.add(
-        "show"
-    );
+    message.classList.add("show");
 
     setTimeout(() => {
 
-        message.classList.remove(
-            "show"
-        );
+        message.classList.remove("show");
 
     }, 2500);
 }
 
 
 /* ==================================================
-   LẤY ĐIỂM TỪ FLASK SESSION
+   LẤY ĐIỂM
 ================================================== */
 
 async function loadUserScore() {
 
     const scoreElement =
-        document.getElementById(
-            "userScore"
-        );
+        document.getElementById("userScore");
 
     if (!scoreElement) return;
 
@@ -716,30 +1061,20 @@ async function loadUserScore() {
                 }
             );
 
-
         if (!response.ok) {
-
             throw new Error(
                 "HTTP " + response.status
             );
         }
 
-
         const data =
             await response.json();
 
-
         const score =
-            Number(
-                data.score || 0
-            );
-
+            Number(data.score || 0);
 
         scoreElement.textContent =
-            score.toLocaleString(
-                "vi-VN"
-            );
-
+            score.toLocaleString("vi-VN");
 
     } catch (error) {
 
@@ -748,14 +1083,276 @@ async function loadUserScore() {
             error
         );
 
-        scoreElement.textContent =
-            "0";
     }
 }
 
 
 /* ==================================================
-   CHẠY KHI TRANG ĐÃ LOAD
+   LẤY THÔNG TIN ĐIỂM DANH
+================================================== */
+
+async function loadCheckin() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/checkin",
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    credentials: "same-origin"
+                }
+            );
+
+        const data =
+            await response.json();
+
+        renderCheckin(data);
+
+    } catch (error) {
+
+        console.error(
+            "Không lấy được điểm danh:",
+            error
+        );
+
+    }
+}
+
+
+/* ==================================================
+   HIỂN THỊ 7 NGÀY
+================================================== */
+
+function renderCheckin(data) {
+
+    const container =
+        document.getElementById(
+            "checkinDays"
+        );
+
+    const streakElement =
+        document.getElementById(
+            "checkinStreak"
+        );
+
+    const button =
+        document.getElementById(
+            "checkinButton"
+        );
+
+    const taskButton =
+        document.getElementById(
+            "taskCheckinButton"
+        );
+
+    const taskText =
+        document.getElementById(
+            "taskCheckinText"
+        );
+
+    const reward =
+        document.getElementById(
+            "taskCheckinReward"
+        );
+
+    if (!container) return;
+
+
+    container.innerHTML = "";
+
+
+    const days =
+        data.days || [];
+
+
+    streakElement.textContent =
+        data.streak || 0;
+
+
+    days.forEach(day => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "checkin-day";
+
+
+        if (day.done) {
+            item.classList.add("done");
+        }
+
+
+        if (day.current) {
+            item.classList.add("current");
+        }
+
+
+        item.innerHTML = `
+
+            <div class="day-number">
+                Ngày ${day.day}
+            </div>
+
+            <div class="day-icon">
+                ${day.done ? "✅" : "🎁"}
+            </div>
+
+            <div class="day-point">
+                +${day.reward.toLocaleString("vi-VN")}
+            </div>
+
+        `;
+
+
+        container.appendChild(item);
+
+    });
+
+
+    if (data.checked_today) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "✅ Đã điểm danh hôm nay";
+
+
+        if (taskButton) {
+
+            taskButton.disabled = true;
+
+            taskButton.textContent =
+                "Đã nhận";
+
+        }
+
+
+        if (taskText) {
+
+            taskText.textContent =
+                "Đã điểm danh hôm nay";
+
+        }
+
+
+    } else {
+
+        button.disabled = false;
+
+        button.textContent =
+            "📅 Điểm danh hôm nay";
+
+
+        if (taskButton) {
+
+            taskButton.disabled = false;
+
+            taskButton.textContent =
+                "Nhận";
+
+        }
+
+
+        if (taskText) {
+
+            taskText.textContent =
+                "Đăng nhập hôm nay";
+
+        }
+
+    }
+
+
+    if (reward) {
+
+        const currentDay =
+            data.next_day || 1;
+
+        const currentReward =
+            data.next_reward || 100;
+
+        reward.textContent =
+            "+" +
+            currentReward.toLocaleString(
+                "vi-VN"
+            );
+
+    }
+
+}
+
+
+/* ==================================================
+   ĐIỂM DANH HÔM NAY
+================================================== */
+
+async function checkinToday() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/checkin",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            showMessage(
+                "❌ " +
+                (
+                    data.message ||
+                    "Không thể điểm danh"
+                )
+            );
+
+            return;
+        }
+
+
+        showMessage(
+            "🎉 " +
+            data.message
+        );
+
+
+        renderCheckin(data);
+
+
+        loadUserScore();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            "❌ Có lỗi khi điểm danh"
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   LOAD
 ================================================== */
 
 document.addEventListener(
@@ -764,12 +1361,14 @@ document.addEventListener(
 
         loadUserScore();
 
+        loadCheckin();
+
     }
 );
 
 
 /* ==================================================
-   TỰ CẬP NHẬT ĐIỂM
+   TỰ CẬP NHẬT
 ================================================== */
 
 setInterval(
@@ -777,8 +1376,12 @@ setInterval(
     3000
 );
 
-</script>
+setInterval(
+    loadCheckin,
+    10000
+);
 
+</script>
 
 </body>
 </html>
