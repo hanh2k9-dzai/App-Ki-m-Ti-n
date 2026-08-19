@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART REWARD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="user-info">
+                <div class="avatar">S</div>
+                <div class="user-text">
+                    <span class="name">SMART</span>
+                    <span class="badge">REWARD</span>
+                </div>
+            </div>
+            <div class="header-icons">
+                <i class="fa-regular fa-bell"></i>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <i class="fa-solid fa-house"></i>
+                <span>Trang chủ</span>
+            </a>
+            <a href="/tasks" class="nav-item {% if request.path == '/tasks' %}active{% endif %}">
+                <i class="fa-solid fa-bullseye"></i>
+                <span>Nhiệm vụ</span>
+            </a>
+            <a href="/wallet" class="nav-item {% if request.path == '/wallet' %}active{% endif %}">
+                <i class="fa-solid fa-sack-dollar"></i>
+                <span>Ví</span>
+            </a>
+            <a href="/quiz" class="nav-item {% if request.path == '/quiz' %}active{% endif %}">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>Câu hỏi</span>
+            </a>
+        </nav>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
