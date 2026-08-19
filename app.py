@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    points = db.Column(db.Integer, default=12580) # Điểm mặc định demo
+    points = db.Column(db.Integer, default=12580)
 
 # Model Câu Hỏi
 class Question(db.Model):
@@ -25,7 +25,7 @@ class Question(db.Model):
     option_b = db.Column(db.String(100), nullable=False)
     option_c = db.Column(db.String(100), nullable=False)
     option_d = db.Column(db.String(100), nullable=False)
-    answer = db.Column(db.String(10), nullable=False) # 'A', 'B', 'C', hoặc 'D'
+    answer = db.Column(db.String(10), nullable=False)
     reward = db.Column(db.Integer, default=100)
 
 # Khởi tạo dữ liệu mẫu
@@ -63,7 +63,6 @@ def quiz():
 
 @app.route('/tasks')
 def tasks():
-    # Danh sách nhiệm vụ vượt link mẫu
     link_tasks = [
         {"id": 1, "title": "Nhiệm vụ Vượt Link #1 (YeoFast)", "reward": 500, "url": "#"},
         {"id": 2, "title": "Nhiệm vụ Vượt Link #2 (Droplink)", "reward": 800, "url": "#"},
