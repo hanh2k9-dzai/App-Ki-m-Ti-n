@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- 🔴 THẺ XÁC MINH MONETAG CỦA BẠN 🔴 -->
+    <!-- Thẻ xác minh Monetag -->
     <meta name="monetag" content="a47fe899c3c3e444d241ac74f8441b0d">
 
     <title>SMART REWARD</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- File CSS Riêng Bằng Flask url_for (Kèm Version Để Tránh Dính Cache) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
 </head>
 <body>
     <div class="app-container">
