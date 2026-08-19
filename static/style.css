@@ -1,31 +1,3 @@
-/* Styling thêm cho hình ảnh trong Banner & Balance Card */
-.hero-img {
-    position: absolute;
-    right: 15px;
-    bottom: 10px;
-    width: 90px;
-    height: 90px;
-}
-
-.hero-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
-}
-
-.wallet-img {
-    width: 50px;
-    height: 50px;
-}
-
-.wallet-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
 body { background-color: #f4f6f9; display: flex; justify-content: center; }
 
@@ -55,6 +27,7 @@ body { background-color: #f4f6f9; display: flex; justify-content: center; }
 .hero-card {
     background: linear-gradient(135deg, #0284c7, #0d9488); color: white;
     padding: 20px; border-radius: 16px; margin-bottom: 15px; position: relative;
+    overflow: hidden;
 }
 .hero-card .subtitle { font-size: 10px; opacity: 0.8; letter-spacing: 1px; }
 .hero-card h2 { font-size: 18px; margin: 5px 0 10px; font-weight: 800; }
@@ -63,16 +36,23 @@ body { background-color: #f4f6f9; display: flex; justify-content: center; }
     display: inline-block; background: #facc15; color: #1e293b;
     padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 12px;
 }
-.hero-icon { position: absolute; right: 20px; top: 20px; font-size: 40px; }
+.hero-img {
+    position: absolute; right: 10px; bottom: 10px;
+    width: 80px; height: 80px;
+}
+.hero-img img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3)); }
 
 /* Balance Card */
 .balance-card {
-    background: #0284c7; color: white; padding: 18px 20px; border-radius: 16px;
+    background: #0ea5e9; color: white; padding: 18px 20px; border-radius: 16px;
     display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+    box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
 }
-.balance-card p { font-size: 12px; opacity: 0.8; }
+.balance-card p { font-size: 12px; opacity: 0.9; }
 .balance-card .points { font-size: 24px; font-weight: 800; }
 .balance-card .points span { font-size: 12px; font-weight: normal; }
+.wallet-img { width: 50px; height: 50px; }
+.wallet-img img { width: 100%; height: 100%; object-fit: contain; }
 
 /* Grid Menu */
 .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -82,9 +62,9 @@ body { background-color: #f4f6f9; display: flex; justify-content: center; }
 }
 .card-icon {
     width: 32px; height: 32px; border-radius: 8px; display: flex;
-    align-items: center; justify-content: center; font-weight: bold;
+    align-items: center; justify-content: center; font-weight: bold; font-size: 16px;
 }
-.question-bg { background: #e0f2fe; color: #0284c7; }
+.question-bg { background: #e0f2fe; }
 .task-bg { background: #fef3c7; }
 .wallet-bg { background: #fef08a; }
 .guide-bg { background: #e0e7ff; }
@@ -95,7 +75,7 @@ body { background-color: #f4f6f9; display: flex; justify-content: center; }
 /* Bottom Nav */
 .bottom-nav {
     position: fixed; bottom: 0; width: 100%; max-width: 480px; background: white;
-    display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #e2e8f0;
+    display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #e2e8f0; z-index: 10;
 }
 .nav-item {
     text-decoration: none; color: #94a3b8; font-size: 10px;
@@ -104,23 +84,23 @@ body { background-color: #f4f6f9; display: flex; justify-content: center; }
 .nav-item i { font-size: 18px; }
 .nav-item.active { color: #0284c7; font-weight: bold; }
 
-/* Quiz & Ads Styles */
+/* Quiz & Ads */
 .ad-box {
     background: #e2e8f0; border: 1px dashed #94a3b8; padding: 15px;
     text-align: center; font-size: 12px; color: #64748b; border-radius: 8px; margin-bottom: 15px;
 }
-.quiz-card { background: white; padding: 20px; border-radius: 12px; }
-.question-text { font-size: 16px; margin-bottom: 15px; }
+.quiz-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.question-text { font-size: 16px; margin-bottom: 15px; color: #1e293b; }
 .timer-box { font-size: 12px; color: #d97706; margin-bottom: 15px; }
 .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .opt-btn {
-    padding: 12px; border: 1px solid #cbd5e1; background: white;
-    border-radius: 8px; text-align: left; font-size: 14px; cursor: pointer;
+    padding: 12px; border: 1px solid #cbd5e1; background: white; color: #1e293b;
+    border-radius: 8px; text-align: left; font-size: 14px; cursor: pointer; transition: 0.2s;
 }
 .opt-btn.selected { border-color: #0284c7; background: #f0f9ff; color: #0284c7; font-weight: bold; }
-.opt-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.opt-btn:disabled { opacity: 0.6; cursor: not-allowed; background: #f8fafc; }
 .btn-submit {
     width: 100%; padding: 12px; background: #0284c7; color: white;
     border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
 }
-.btn-submit:disabled { background: #94a3b8; }
+.btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
