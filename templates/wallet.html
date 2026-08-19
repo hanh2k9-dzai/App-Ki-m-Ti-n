@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="margin-bottom: 15px; font-size: 18px; color: #1e293b;">Ví của tôi</h2>
+<div class="quiz-card">
+    <p style="color: #64748b;">Số điểm hiện tại: <strong>{{ "{:,}".format(user.points) }} POINT</strong></p>
+    <br>
+    <button class="btn-primary" style="border:none; cursor:pointer;">Yêu cầu rút tiền</button>
+</div>
+{% endblock %}
